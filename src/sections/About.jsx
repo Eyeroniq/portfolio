@@ -16,7 +16,7 @@ export default function About() {
             ))}
             <p className="about__sign mono">
               <span className="dot" aria-hidden="true" />
-              {profile.name.toLowerCase()} — {profile.role.toLowerCase()}
+              {profile.fullName.toLowerCase()} — {profile.role.toLowerCase()}
               {profile.location && ` · ${profile.location.toLowerCase()}`}
             </p>
           </Reveal>

@@ -56,7 +56,8 @@
   height: 100%;
   pointer-events: auto;
   cursor: grab;
-  touch-action: none;
+  /* Vertical swipes stay native page scrolling; sideways drags move the badge */
+  touch-action: pan-y;
   -webkit-tap-highlight-color: transparent;
   user-select: none;
 }
@@ -237,42 +238,53 @@
   }
 }
 
-/* Phones: four badges, a touch smaller, so the face and the copy stay the focus.
-   Left: React (high) and FastAPI beside the shoulder on the left of the screen.
-   Right: AI and Python. */
+/* Phones: four badges (52px, 12px labels), two on each side of the portrait, all at head and
+   shoulder height — the only band where the edges leave 12px+ clearance from the subject
+   (lower down, the forearms come within ~60px of the screen edges). Staggered per side:
+   React (high) + FastAPI on the left, AI (high) + Python on the right. */
 @media (max-width: 639px) and (orientation: portrait) {
   .orb {
     width: 52px;
     height: 52px;
   }
   .orb--react {
-    top: 5% !important;
-    left: 12% !important;
-  }
-  .orb--fastapi {
-    top: 25% !important;
-    left: 5% !important;
+    top: 4% !important;
+    left: 8% !important;
     right: auto !important;
   }
-  /* Clear of the (larger) name and its mint dot */
+  .orb--fastapi {
+    top: 26% !important;
+    left: 4% !important;
+    right: auto !important;
+  }
+  .orb--ai {
+    top: 8% !important;
+    right: 5% !important;
+    left: auto !important;
+  }
   .orb--python {
-    top: 43% !important;
+    top: 30% !important;
     right: 3% !important;
+    left: auto !important;
   }
   .orb__orbit {
     inset: -6px;
   }
 }
 
-/* Short phones: not enough height above the name for two stacked badges + labels on each
-   side, so keep one per side (still balanced). */
-@media (max-width: 639px) and (orientation: portrait) and (max-height: 720px) {
-  .orb--react,
-  .orb--fastapi {
+/* Very narrow phones (< 360px): no room beside the portrait, so no floating badges */
+@media (max-width: 359px) {
+  .orbs {
     display: none;
   }
-  .orb--ai {
-    top: 16% !important;
+}
+
+/* Short phones: not enough height above the name for two stacked badges + labels on each
+   side, so keep one per side, still balanced: React (left) and AI (right). */
+@media (max-width: 639px) and (orientation: portrait) and (max-height: 720px) {
+  .orb--fastapi,
+  .orb--python {
+    display: none;
   }
 }
 

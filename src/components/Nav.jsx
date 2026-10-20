@@ -70,7 +70,7 @@ export default function Nav() {
         transition={{ duration: 0.5, delay: 0, ease }}
       >
         <div className="nav__inner container container--bleed">
-          <a className="nav__brand" href="#top" aria-label={`${profile.name} — back to top`}>
+          <a className="nav__brand" href="#top" aria-label={`${profile.fullName} — back to top`}>
             <span className="nav__brand-name">{profile.monogram}</span>
             <span className="nav__brand-dot" aria-hidden="true" />
           </a>

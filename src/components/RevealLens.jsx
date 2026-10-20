@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { motion, useMotionTemplate, useMotionValue, useSpring, useTransform, useReducedMotion } from 'motion/react'
+import { listenForTouchTap } from '../hooks/useTouchTap.js'
 import './RevealLens.css'
 
 /**
@@ -72,10 +73,8 @@ export default function RevealLens({ areaRef, src, srcSet, sizes, objectPosition
       if (e.pointerType === 'touch') return
       target.set(0)
     }
-    const onDown = (e) => {
-      if (e.pointerType !== 'touch') return
-      // Ignore taps on links / buttons inside the hero.
-      if (e.target.closest('a, button, [role="link"]')) return
+    // Touch: open the lens only on a genuine tap — never when a scroll starts on the hero.
+    const onTap = (e) => {
       clearTimeout(hideTimer)
       place(e, true)
       target.set(radius.current * 0.85)
@@ -85,14 +84,14 @@ export default function RevealLens({ areaRef, src, srcSet, sizes, objectPosition
     area.addEventListener('pointerenter', onEnter)
     area.addEventListener('pointermove', onMove)
     area.addEventListener('pointerleave', onLeave)
-    area.addEventListener('pointerdown', onDown)
+    const stopTap = listenForTouchTap(area, onTap)
     window.addEventListener('resize', setRadius)
     return () => {
       clearTimeout(hideTimer)
       area.removeEventListener('pointerenter', onEnter)
       area.removeEventListener('pointermove', onMove)
       area.removeEventListener('pointerleave', onLeave)
-      area.removeEventListener('pointerdown', onDown)
+      stopTap()
       window.removeEventListener('resize', setRadius)
     }
   }, [areaRef, x, y, springX, springY, target])

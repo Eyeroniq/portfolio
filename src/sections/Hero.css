@@ -243,6 +243,17 @@
   width: 6px;
   height: 6px;
 }
+/* Retired hint keeps its box (no reflow), it only fades out */
+.hero__hint.is-retired {
+  pointer-events: none;
+}
+/* Phone-only placement (see the phone block below) */
+.hero__hint--top {
+  display: none;
+}
+.hero__tagline-short {
+  display: none;
+}
 
 /* ── Short desktop viewports: tighten vertical rhythm so everything fits ── */
 @media (min-width: 900px) and (max-height: 760px) {
@@ -361,7 +372,8 @@
 @media (max-width: 520px) {
   .hero__portrait,
   .lens__img {
-    object-position: 51% 0% !important;
+    /* center top: the face sits in the upper part of the frame */
+    object-position: 50% 0% !important;
   }
   .hero__intro {
     height: 40px;
@@ -419,7 +431,9 @@
  */
 @media (max-width: 639px) and (orientation: portrait) {
   .hero {
-    --media-h: min(58svh, 150vw);
+    /* Portrait is the focus: a taller photo, so head + upper body fill ~60% of the screen
+       and the face sits in the upper third */
+    --media-h: min(64svh, 150vw);
     /* Dark grey (not black) base on phones, so the fade reads grey → dark grey */
     --hero-base: #2b2d31;
     /* Brighter, crisper photo on phones */
@@ -437,19 +451,18 @@
       linear-gradient(
         0deg,
         /* Lighter, grey-toned fade: mid grey near the face → dark grey behind the copy */
+        /* Starts low (~55% down the screen), so the portrait stays bright above the text */
         var(--hero-base) 0%,
-        rgba(43, 45, 49, 0.74) 16%,
-        rgba(46, 48, 52, 0.52) 32%,
-        rgba(46, 48, 52, 0.34) 44%,
-        rgba(58, 60, 64, 0.16) 54%,
-        rgba(66, 68, 72, 0.05) 62%,
-        rgba(70, 72, 76, 0) 68%
+        rgba(43, 45, 49, 0.72) 9%,
+        rgba(46, 48, 52, 0.42) 17%,
+        rgba(58, 60, 64, 0.14) 23%,
+        rgba(70, 72, 76, 0) 27%
       );
   }
   .hero__title {
     margin-top: 12px;
-    /* Bold but not overpowering on phones, so the photo and copy breathe */
-    font-size: clamp(40px, 14vw, 64px);
+    /* ~35% smaller on phones (about 38px at 390px wide): still bold, but the portrait leads */
+    font-size: clamp(32px, 9.8vw, 44px);
     letter-spacing: -0.035em;
   }
   .hero__tagline {
@@ -493,6 +506,92 @@
     --btn-h: 44px;
     font-size: 14.5px;
     padding: 0 2px;
+  }
+}
+
+/*
+ * ── Phones (< 640px, portrait): text block, buttons and hint ──────────────────
+ * Nothing in here changes height after load (the hint is out of the flow and only fades),
+ * so the hero can't resize while someone scrolls past it.
+ */
+@media (max-width: 639px) and (orientation: portrait) {
+  /* A subtle dark gradient from ~55% down the screen keeps the copy readable */
+  .hero::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 2;
+    height: 45svh;
+    background: linear-gradient(0deg, rgba(26, 28, 31, 0.55) 0%, rgba(26, 28, 31, 0.3) 55%, rgba(26, 28, 31, 0) 100%);
+    pointer-events: none;
+  }
+  /* The text block sits at the bottom of the screen, just above the buttons, instead of
+     leaving an empty band under them on tall phones. It can only move down (away from the
+     face); its padding-top still stops it rising above the chest line on short screens. */
+  .hero {
+    align-items: flex-end;
+  }
+  .hero__content {
+    /* Buttons clear the iPhone home indicator */
+    padding-bottom: max(32px, calc(20px + env(safe-area-inset-bottom)));
+  }
+  /* 16px rhythm: name → eyebrow → tagline; 24px from the text block to the buttons */
+  .hero__role {
+    margin-top: 16px;
+  }
+  .hero__tagline {
+    margin-top: 16px;
+    max-width: 90%;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  .hero__tagline-full {
+    display: none;
+  }
+  .hero__tagline-short {
+    display: inline;
+  }
+
+  .hero__actions {
+    gap: 12px 16px;
+    margin-top: 24px;
+  }
+  .hero__actions .btn--primary {
+    height: 48px;
+  }
+  /* "Get in Touch" + "Request CV": equal halves, side by side, 44px tap targets */
+  .hero__actions .hero__contact,
+  .hero__actions .hero__cv {
+    --btn-h: 44px;
+    flex: 1 1 0;
+    min-width: 0;
+    padding: 0 12px;
+    justify-content: center;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: rgba(255, 255, 255, 0.04);
+    font-size: 14.5px;
+  }
+
+  /* "tap the portrait" moves to the top area — centred just under the nav, above the hair —
+     out of the text flow (so it never changes the hero's height) and away from the buttons */
+  .hero__hint--inline {
+    display: none;
+  }
+  .hero__hint--top {
+    display: flex;
+    position: absolute;
+    top: calc(var(--media-top) + 14px);
+    left: 0;
+    right: 0;
+    z-index: 4;
+    justify-content: center;
+    margin: 0;
+    pointer-events: none;
+  }
+  .hero__hint-pill .mono {
+    font-size: 12px;
   }
 }
 

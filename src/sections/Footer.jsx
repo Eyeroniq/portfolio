@@ -20,7 +20,7 @@ export default function Footer() {
         </a>
 
         <p className="footer__copy mono">
-          © {year} {profile.name.toLowerCase()} · built with react
+          © {year} {profile.fullName.toLowerCase()} · built with react
         </p>
 
         <div className="footer__end">

@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
-import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
+import { motion, useReducedMotion } from 'motion/react'
 import { ArrowDown, ArrowUpRight, Download, Mail } from 'lucide-react'
 import { profile, links } from '../data/portfolio.js'
 import { useFinePointer } from '../hooks/useMediaQuery.js'
 import { useIntroReady } from '../hooks/useIntroReady.js'
+import { listenForTouchTap } from '../hooks/useTouchTap.js'
 import ScrambleText from '../components/ScrambleText.jsx'
 import Button from '../components/Button.jsx'
 import RevealLens from '../components/RevealLens.jsx'
@@ -54,25 +55,44 @@ export default function Hero() {
   const [portraitFailed, setPortraitFailed] = useState(false)
   const [hintSeen, setHintSeen] = useState(readHintSeen)
 
-  // First tap on the portrait (touch only, not on a link/button) retires the hint for good.
+  // First real *tap* on the portrait (touch only, not on a link/button) retires the hint for
+  // good. A scroll that merely starts on the hero is not a tap (see listenForTouchTap).
   useEffect(() => {
     const area = areaRef.current
     if (!area || hintSeen) return
-    const onDown = (e) => {
-      if (e.pointerType !== 'touch' || e.target.closest('a, button, [role="link"]')) return
+    return listenForTouchTap(area, () => {
       setHintSeen(true)
       try {
         localStorage.setItem(HINT_KEY, '1')
       } catch {
         /* storage blocked — the hint just hides for this visit */
       }
-    }
-    area.addEventListener('pointerdown', onDown)
-    return () => area.removeEventListener('pointerdown', onDown)
+    })
   }, [hintSeen])
   const showHint = finePointer || !hintSeen
 
   const name = profile.name.toUpperCase()
+
+  /*
+   * "hover / tap the portrait" hint. Always rendered, so its box never disappears: once
+   * retired it only fades out (removing it changed the hero's height mid-scroll on phones).
+   * Two placements: inline under the buttons (tablet / desktop), and pinned to the top of the
+   * photo on phones — CSS shows exactly one of them.
+   */
+  const hint = (placement) => (
+    <motion.p
+      className={`hero__hint hero__hint--${placement}${showHint ? '' : ' is-retired'}`}
+      aria-hidden={showHint ? undefined : 'true'}
+      initial={{ opacity: 0, y: 16 }}
+      animate={go ? { opacity: showHint ? 1 : 0, y: 0 } : undefined}
+      transition={{ duration: showHint ? RISE : 0.35, delay: showHint ? SEQ.hint : 0, ease }}
+    >
+      <span className="hero__hint-pill">
+        <span className="dot" aria-hidden="true" />
+        <span className="mono">{finePointer ? 'hover the portrait' : 'tap the portrait'}</span>
+      </span>
+    </motion.p>
+  )
 
   return (
     <section id="top" className="hero" ref={areaRef} aria-labelledby="hero-title">
@@ -94,7 +114,7 @@ export default function Hero() {
               src={portrait1672}
               srcSet={`${portrait960} 960w, ${portrait1672} 1672w`}
               sizes={SIZES}
-              alt={`Portrait of ${profile.name} holding an open book`}
+              alt={`Portrait of ${profile.fullName} holding an open book`}
               fetchPriority="high"
               decoding="async"
               style={{ objectPosition: OBJECT_POSITION }}
@@ -114,6 +134,7 @@ export default function Hero() {
         )}
         {/* Badges live inside the photo block so on phones they stay anchored to the image. */}
         <FloatingOrbs areaRef={areaRef} enabled={finePointer} ready={go} />
+        {hint('top')}
         {/* Labelled CV badge beside the portrait on phones — only once a real PDF is set. */}
         {links.cv && (
           <motion.a
@@ -143,7 +164,9 @@ export default function Hero() {
             </motion.p>
 
             {/* The name moves as one piece — no per-letter clipping boxes behind it. */}
-            <motion.h1 className="hero__title" id="hero-title" aria-label={`${profile.name}.`} {...rise(SEQ.name, go)}>
+            <motion.h1 className="hero__title" id="hero-title" {...rise(SEQ.name, go)}>
+              {/* The heading's real text is the full name; the big "DHEERAJ." is its visual form. */}
+              <span className="visually-hidden">{profile.fullName}</span>
               <span className="hero__title-band" aria-hidden="true">
                 {name}
                 <motion.span
@@ -178,7 +201,9 @@ export default function Hero() {
             </motion.p>
 
             <motion.p className="hero__tagline" {...rise(SEQ.tagline, go)}>
-              {profile.tagline}
+              {/* Phones show the short two-line version; everything else the full sentence. */}
+              <span className="hero__tagline-full">{profile.tagline}</span>
+              <span className="hero__tagline-short">{profile.taglineShort}</span>
             </motion.p>
 
             <motion.div className="hero__actions" {...rise(SEQ.actions, go)}>
@@ -200,20 +225,7 @@ export default function Hero() {
               )}
             </motion.div>
 
-            <AnimatePresence>
-              {showHint && (
-                <motion.p
-                  className="hero__hint"
-                  {...rise(SEQ.hint, go)}
-                  exit={{ opacity: 0, y: -6, transition: { duration: 0.35 } }}
-                >
-                  <span className="hero__hint-pill">
-                    <span className="dot" aria-hidden="true" />
-                    <span className="mono">{finePointer ? 'hover the portrait' : 'tap the portrait'}</span>
-                  </span>
-                </motion.p>
-              )}
-            </AnimatePresence>
+            {hint('inline')}
           </div>
         </div>
       </div>

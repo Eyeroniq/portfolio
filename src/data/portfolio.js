@@ -9,11 +9,15 @@
 
 export const profile = {
   name: 'Dheeraj',
+  // Full name — used wherever search engines and screen readers read who this is.
+  fullName: 'Dheeraj Chingunde',
   // Shown in the nav and footer.
   monogram: 'DHEERAJ',
   role: 'AI & Backend Engineer',
   // Rendered in uppercase by CSS ("HI, I'M").
   intro: "Hi, I'm",
+  // Shown on phones, where the full tagline would run to four lines.
+  taglineShort: 'Building intelligent systems that work in production.',
   tagline:
     'Building intelligent systems that work in production — AI‑powered workflows, reliable APIs, and machine learning solutions for real-world problems.',
   available: true,
@@ -44,7 +48,7 @@ export const nav = [
 export const about = {
   heading: 'Building AI systems that actually work.',
   paragraphs: [
-    "I'm an AI & backend engineer. I like the part of the job where a fuzzy idea becomes a system that runs reliably — clear APIs, sensible data models, background jobs that don't fall over, and AI features that hold up outside a demo.",
+    "I'm Dheeraj Chingunde, an AI & backend engineer. I like the part of the job where a fuzzy idea becomes a system that runs reliably — clear APIs, sensible data models, background jobs that don't fall over, and AI features that hold up outside a demo.",
     'Most of what I build sits where language models meet production software: workflow automation that takes repetitive work off people’s plates, developer tooling, and real-time backends with clean access control.',
   ],
   principles: [

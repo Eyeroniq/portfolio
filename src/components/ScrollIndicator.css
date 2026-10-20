@@ -53,20 +53,9 @@
   }
 }
 
+/* Phones and tablets: the hero's buttons sit at the bottom of the screen, so no cue here */
 @media (max-width: 899px) and (orientation: portrait), (max-aspect-ratio: 4/5) {
   .scroll-indicator {
-    display: none;
-  }
-}
-
-/* Phones with room below the buttons: a minimal cue (just the glowing line) fills the
-   space at the bottom of the hero and invites the scroll. */
-@media (max-width: 639px) and (orientation: portrait) and (min-height: 700px) {
-  .scroll-indicator {
-    display: flex;
-    bottom: max(24px, calc(12px + env(safe-area-inset-bottom)));
-  }
-  .scroll-indicator .mono {
     display: none;
   }
 }
