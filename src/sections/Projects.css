@@ -1,0 +1,31 @@
+.projects {
+  background: radial-gradient(50% 40% at 100% 10%, rgba(110, 231, 183, 0.04), transparent 70%), var(--bg);
+  border-top: 1px solid var(--line);
+}
+
+/* Asymmetric editorial grid: wide / narrow, then narrow / wide. */
+.projects__grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: clamp(16px, 2vw, 24px);
+}
+.projects__grid > :nth-child(4n + 1),
+.projects__grid > :nth-child(4n + 4) {
+  grid-column: span 7;
+}
+.projects__grid > :nth-child(4n + 2),
+.projects__grid > :nth-child(4n + 3) {
+  grid-column: span 5;
+}
+
+@media (max-width: 1023px) {
+  .projects__grid > * {
+    grid-column: span 6 !important;
+  }
+}
+
+@media (max-width: 719px) {
+  .projects__grid > * {
+    grid-column: 1 / -1 !important;
+  }
+}

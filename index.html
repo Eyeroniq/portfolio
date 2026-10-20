@@ -1,0 +1,395 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#0c0c0f" />
+    <meta name="color-scheme" content="dark" />
+    <title>Dheeraj — AI &amp; Backend Engineer</title>
+    <meta name="description" content="Dheeraj — AI &amp; backend engineer building intelligent systems that work in production: AI-powered workflows, reliable APIs, and machine learning solutions for real-world problems." />
+    <meta name="author" content="Dheeraj" />
+    <!-- Social preview. TODO: once deployed, make og:image / twitter:image absolute
+         (e.g. https://your-domain.com/og-image.jpg) and add <meta property="og:url">. -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Dheeraj" />
+    <meta property="og:title" content="Dheeraj — AI &amp; Backend Engineer" />
+    <meta property="og:description" content="Intelligent systems that work in production — AI-powered workflows, reliable APIs, and machine learning." />
+    <meta property="og:image" content="/og-image.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Dheeraj — AI &amp; Backend Engineer" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Dheeraj — AI &amp; Backend Engineer" />
+    <meta name="twitter:description" content="Intelligent systems that work in production — AI-powered workflows, reliable APIs, and machine learning." />
+    <meta name="twitter:image" content="/og-image.jpg" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+
+    <!--
+      ── Loader gate ──────────────────────────────────────────────────────────────
+      Runs before first paint. If this tab has already seen the intro (sessionStorage),
+      the loader is hidden immediately so there is no flash. It also tells the React app
+      whether to hold its hero entrance until the loader slides away (window.__introReady).
+    -->
+    <script>
+      ;(function () {
+        var seen = false
+        try {
+          seen = sessionStorage.getItem('dheeraj:intro-seen') === '1'
+        } catch (e) {
+          /* storage blocked (private mode etc.) — just show the loader */
+        }
+        window.__introReady = seen
+        if (seen) document.documentElement.classList.add('no-loader')
+      })()
+    </script>
+
+    <!--
+      ── Loader styles ────────────────────────────────────────────────────────────
+      Inline so the loader paints instantly, before the app bundle downloads.
+      All timings come from CSS variables that the loader script sets from its constants.
+    -->
+    <style>
+      .loader {
+        --mint: #6ee7b7;
+        position: fixed;
+        inset: 0;
+        z-index: 1000;
+        display: grid;
+        place-items: center;
+        padding: 24px;
+        background: #0f0f10;
+        color: #f1f0f7;
+        transition: transform var(--exit, 550ms) cubic-bezier(0.76, 0, 0.24, 1);
+        will-change: transform;
+      }
+      .no-loader .loader {
+        display: none;
+      }
+      /* Exit: the whole panel slides up and off the screen */
+      .loader.is-exiting {
+        transform: translate3d(0, -100%, 0);
+      }
+
+      .loader__inner {
+        display: grid;
+        justify-items: start;
+        gap: 14px;
+      }
+
+      /* 1. "Hello" */
+      .loader__hello {
+        margin: 0;
+        font-family: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+        font-size: 14px;
+        letter-spacing: 0.18em;
+        color: #9a98a8;
+        opacity: 0;
+        animation: loader-fade var(--hello, 300ms) ease-out forwards;
+      }
+
+      /* 2. "DHEERAJ" — letters fade/rise in one by one, then the mint dot pops and pulses once */
+      .loader__name {
+        display: flex;
+        align-items: flex-end;
+        margin: 0;
+        font-family: 'Space Grotesk', system-ui, -apple-system, 'Segoe UI', sans-serif;
+        font-weight: 700;
+        font-size: clamp(44px, 11vw, 96px);
+        line-height: 0.95;
+        letter-spacing: -0.035em;
+      }
+      .loader__char {
+        display: inline-block;
+        opacity: 0;
+        transform: translateY(0.25em);
+        animation: loader-char var(--char-dur, 300ms) cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        animation-delay: calc(var(--name-start, 250ms) + var(--i) * var(--stagger, 50ms));
+      }
+      .loader__dot {
+        flex: none;
+        width: 0.14em;
+        height: 0.14em;
+        margin: 0 0 0.08em 0.04em;
+        border-radius: 50%;
+        background: var(--mint);
+        opacity: 0;
+        transform: scale(0);
+        animation: loader-dot var(--dot-dur, 450ms) ease-out forwards;
+        animation-delay: var(--dot-start, 750ms);
+      }
+
+      /* 3. Thin mint line that fills left → right under the name */
+      .loader__line {
+        width: 100%;
+        height: 2px;
+        border-radius: 2px;
+        overflow: hidden;
+        background: rgba(255, 255, 255, 0.08);
+      }
+      .loader__line-fill {
+        display: block;
+        height: 100%;
+        background: var(--mint);
+        box-shadow: 0 0 10px rgba(110, 231, 183, 0.6);
+        transform: scaleX(0);
+        transform-origin: left center;
+        animation: loader-line var(--line-dur, 500ms) cubic-bezier(0.65, 0, 0.35, 1) forwards;
+        animation-delay: var(--line-start, 800ms);
+      }
+
+      /* Skip — visible from the start, bottom-right */
+      .loader__skip {
+        position: absolute;
+        right: max(20px, env(safe-area-inset-right));
+        bottom: max(20px, env(safe-area-inset-bottom));
+        min-height: 44px;
+        padding: 0 18px;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 999px;
+        background: transparent;
+        color: #9a98a8;
+        font: 500 12px/1 'JetBrains Mono', ui-monospace, monospace;
+        letter-spacing: 0.14em;
+        text-transform: lowercase;
+        cursor: pointer;
+        transition:
+          color 0.2s ease,
+          border-color 0.2s ease;
+      }
+      .loader__skip:hover,
+      .loader__skip:focus-visible {
+        color: #f1f0f7;
+        border-color: rgba(110, 231, 183, 0.6);
+        outline: none;
+      }
+      .loader__skip:focus-visible {
+        box-shadow: 0 0 0 2px #0f0f10, 0 0 0 4px var(--mint);
+      }
+
+      @keyframes loader-fade {
+        to {
+          opacity: 1;
+        }
+      }
+      @keyframes loader-char {
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+      @keyframes loader-dot {
+        0% {
+          opacity: 0;
+          transform: scale(0);
+          box-shadow: 0 0 0 0 rgba(110, 231, 183, 0.6);
+        }
+        45% {
+          opacity: 1;
+          transform: scale(1.3);
+        }
+        65% {
+          transform: scale(1);
+          box-shadow: 0 0 0 0 rgba(110, 231, 183, 0.6);
+        }
+        100% {
+          opacity: 1;
+          transform: scale(1);
+          box-shadow: 0 0 0 0.4em rgba(110, 231, 183, 0);
+        }
+      }
+      @keyframes loader-line {
+        to {
+          transform: scaleX(1);
+        }
+      }
+
+      /* Reduced motion: everything is shown instantly, nothing animates or slides */
+      @media (prefers-reduced-motion: reduce) {
+        .loader,
+        .loader * {
+          animation: none !important;
+          transition: none !important;
+        }
+        .loader__hello,
+        .loader__char,
+        .loader__dot {
+          opacity: 1;
+          transform: none;
+        }
+        .loader__line-fill {
+          transform: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ── Loader markup ─────────────────────────────────────────────────────────── -->
+    <div class="loader" id="loader" role="status" aria-label="Loading Dheeraj's portfolio">
+      <div class="loader__inner" aria-hidden="true">
+        <p class="loader__hello">Hello</p>
+        <p class="loader__name" id="loader-name"><span class="loader__dot"></span></p>
+        <div class="loader__line"><span class="loader__line-fill"></span></div>
+      </div>
+      <button class="loader__skip" id="loader-skip" type="button">skip intro</button>
+    </div>
+
+    <!-- ── Loader script ─────────────────────────────────────────────────────────── -->
+    <script>
+      ;(function () {
+        /* ─── Timing (milliseconds) — change these to retime the intro ─────────── */
+        var HELLO_FADE = 300 // "Hello" fade-in
+        var NAME_START = 250 // when the first letter of the name starts
+        var LETTER_STAGGER = 50 // delay between letters
+        var LETTER_DURATION = 300 // each letter's fade/rise
+        var DOT_DURATION = 450 // mint dot pop + single pulse
+        var LINE_START = 800 // when the mint line starts filling
+        var LINE_DURATION = 500 // how long the line takes to fill
+        var HOLD = 100 // pause on the finished state before exiting
+        var EXIT_DURATION = 550 // slide-up duration
+        var SKIP_EXIT_DURATION = 350 // faster slide-up when "skip" is pressed
+        var REDUCED_MOTION_HOLD = 500 // how long the static loader shows with reduced motion
+        var MAX_WAIT_FOR_LOAD = 1500 // on slow networks, extra time allowed for the page to finish loading
+
+        /* ─── Config ─────────────────────────────────────────────────────────── */
+        var NAME = 'DHEERAJ'
+        var STORAGE_KEY = 'dheeraj:intro-seen'
+
+        var root = document.documentElement
+        var loader = document.getElementById('loader')
+        if (!loader) return
+
+        // Already seen this session: the head script hid it — drop it from the DOM entirely.
+        if (root.classList.contains('no-loader')) {
+          loader.remove()
+          return
+        }
+
+        var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+        /* ─── Build the name, one span per letter, dot stays at the end ─────── */
+        var nameEl = document.getElementById('loader-name')
+        var dot = nameEl.querySelector('.loader__dot')
+        for (var i = 0; i < NAME.length; i++) {
+          var ch = document.createElement('span')
+          ch.className = 'loader__char'
+          ch.style.setProperty('--i', i)
+          ch.textContent = NAME[i]
+          nameEl.insertBefore(ch, dot)
+        }
+
+        // The dot starts as the last letter is settling, so it "lands" on the name.
+        var lastLetterEnd = NAME_START + (NAME.length - 1) * LETTER_STAGGER + LETTER_DURATION
+        var DOT_START = lastLetterEnd - 100
+
+        /* ─── Hand the timing constants to the CSS ─────────────────────────── */
+        var vars = {
+          '--hello': HELLO_FADE,
+          '--name-start': NAME_START,
+          '--stagger': LETTER_STAGGER,
+          '--char-dur': LETTER_DURATION,
+          '--dot-start': DOT_START,
+          '--dot-dur': DOT_DURATION,
+          '--line-start': LINE_START,
+          '--line-dur': LINE_DURATION,
+          '--exit': EXIT_DURATION,
+        }
+        for (var key in vars) loader.style.setProperty(key, vars[key] + 'ms')
+
+        // Keep the page still underneath while the loader is up.
+        var prevOverflow = root.style.overflow
+        root.style.overflow = 'hidden'
+
+        /* ─── Reveal: slide away, start the page, then remove the loader ───── */
+        var done = false
+        function reveal(exitMs) {
+          if (done) return
+          done = true
+
+          try {
+            sessionStorage.setItem(STORAGE_KEY, '1')
+          } catch (e) {}
+
+          root.style.overflow = prevOverflow
+          // Tell the React app it can play the hero entrance now.
+          window.__introReady = true
+          window.dispatchEvent(new Event('intro:start'))
+          document.removeEventListener('keydown', onKey)
+
+          if (reduced) {
+            loader.remove()
+            return
+          }
+          loader.style.setProperty('--exit', exitMs + 'ms')
+          loader.classList.add('is-exiting')
+          // Remove from the DOM once it's off-screen so it can't block clicks or scrolling.
+          var removed = false
+          function cleanup() {
+            if (removed) return
+            removed = true
+            loader.remove()
+          }
+          loader.addEventListener('transitionend', cleanup, { once: true })
+          setTimeout(cleanup, exitMs + 150) // fallback if transitionend never fires
+        }
+
+        // On slow connections, hold on the finished state (briefly) until the page has loaded.
+        function whenLoaded(cb) {
+          if (document.readyState === 'complete') return cb()
+          var timer = setTimeout(cb, MAX_WAIT_FOR_LOAD)
+          window.addEventListener(
+            'load',
+            function () {
+              clearTimeout(timer)
+              cb()
+            },
+            { once: true },
+          )
+        }
+
+        /* ─── Skip button (and Escape) ───────────────────────────────────────── */
+        document.getElementById('loader-skip').addEventListener('click', function () {
+          reveal(SKIP_EXIT_DURATION)
+        })
+        function onKey(e) {
+          if (e.key === 'Escape') reveal(SKIP_EXIT_DURATION)
+        }
+        document.addEventListener('keydown', onKey)
+
+        /* ─── Run the timeline ─────────────────────────────────────────────── */
+        if (reduced) {
+          setTimeout(function () {
+            reveal(0)
+          }, REDUCED_MOTION_HOLD)
+          return
+        }
+        // The exit is driven by the line's own `animationend`, so it stays in sync with what is
+        // actually on screen even if the first paint is late (slow font CSS, background tab).
+        var lineEnd = LINE_START + LINE_DURATION
+        var afterLine = Math.max(0, DOT_START + DOT_DURATION - lineEnd) + HOLD
+        var fill = loader.querySelector('.loader__line-fill')
+        fill.addEventListener(
+          'animationend',
+          function () {
+            setTimeout(function () {
+              whenLoaded(function () {
+                reveal(EXIT_DURATION)
+              })
+            }, afterLine)
+          },
+          { once: true },
+        )
+        // Safety net: never keep the visitor waiting if animations don't run at all.
+        setTimeout(function () {
+          reveal(EXIT_DURATION)
+        }, lineEnd + afterLine + MAX_WAIT_FOR_LOAD + 2000)
+      })()
+    </script>
+
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

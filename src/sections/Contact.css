@@ -1,0 +1,211 @@
+.contact {
+  overflow: hidden;
+  background: var(--bg);
+  border-top: 1px solid var(--line);
+}
+
+.contact__glow {
+  position: absolute;
+  left: 50%;
+  bottom: -40%;
+  width: min(1100px, 140vw);
+  aspect-ratio: 1;
+  translate: -50% 0;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(110, 231, 183, 0.1), rgba(110, 231, 183, 0.02) 45%, transparent 68%);
+  pointer-events: none;
+}
+
+.contact__inner {
+  position: relative;
+  display: grid;
+  justify-items: start;
+}
+
+.contact__label {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--text-3);
+}
+
+.contact__title {
+  margin-top: 28px;
+  max-width: 13ch;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(48px, 8.4vw, 132px);
+  line-height: 0.95;
+  letter-spacing: -0.045em;
+  text-transform: uppercase;
+}
+.contact__accent {
+  color: var(--accent);
+  text-shadow: 0 0 60px rgba(110, 231, 183, 0.25);
+}
+
+.contact__lead {
+  margin-top: 28px;
+  max-width: 520px;
+  color: var(--text-2);
+  font-size: clamp(16px, 1.4vw, 18px);
+}
+
+.contact__mail-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px 20px;
+  margin-top: 48px;
+  max-width: 100%;
+}
+.contact__mail {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  max-width: 100%;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--line-strong);
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(20px, 3vw, 36px);
+  letter-spacing: -0.02em;
+  transition:
+    color 0.3s var(--ease),
+    border-color 0.3s var(--ease);
+}
+.contact__mail span {
+  overflow-wrap: anywhere;
+}
+.contact__mail svg {
+  flex: none;
+}
+.contact__mail:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+.contact__mail-arrow {
+  transition: transform 0.35s var(--ease);
+}
+.contact__mail:hover .contact__mail-arrow {
+  transform: translate(3px, -3px);
+}
+
+.contact__copy {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 36px;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 1px solid var(--line-strong);
+  color: var(--text-2);
+  transition:
+    color 0.3s var(--ease),
+    border-color 0.3s var(--ease);
+}
+.contact__copy:hover {
+  color: var(--accent);
+  border-color: var(--accent-border);
+}
+.contact__copy .mono {
+  font-size: 12px;
+}
+
+.contact__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 40px;
+}
+
+.contact__status {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 40px;
+  color: var(--text-3);
+}
+
+/* Portrait orb — echoes the hero lens; hovering reveals the illustrated layer. */
+.contact__visual {
+  position: absolute;
+  top: 50%;
+  right: var(--gutter);
+  width: clamp(300px, 28vw, 420px);
+  aspect-ratio: 1;
+  margin-top: calc(clamp(300px, 28vw, 420px) / -2);
+}
+.contact__orb {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--surface);
+  box-shadow:
+    0 0 0 1px rgba(110, 231, 183, 0.45),
+    0 40px 90px -30px var(--shadow),
+    0 0 80px -20px rgba(110, 231, 183, 0.25);
+}
+.contact__orb-img {
+  position: absolute;
+  inset: 0;
+  background-size: auto 250%;
+  background-position: 52% 34%;
+  filter: grayscale(0.2) contrast(1.05) brightness(0.92);
+  transition:
+    clip-path 0.9s var(--ease),
+    filter 0.6s var(--ease);
+}
+.contact__orb-img--reveal {
+  filter: saturate(0.92) brightness(0.97);
+  clip-path: circle(0% at 50% 50%);
+}
+.contact__orb-img--reveal::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: #d6fbea;
+  mix-blend-mode: multiply;
+  opacity: 0.85;
+}
+.contact__visual:hover .contact__orb-img--reveal {
+  clip-path: circle(75% at 50% 50%);
+}
+.contact__orbit {
+  position: absolute;
+  inset: -22px;
+  border-radius: 50%;
+  border: 1px dashed var(--line-strong);
+}
+.contact__orbit--outer {
+  inset: -58px;
+  border-style: solid;
+  border-color: var(--line);
+}
+.contact__orbit::after {
+  content: '';
+  position: absolute;
+  top: 14%;
+  right: 12%;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 12px var(--accent-glow);
+}
+.contact__orbit--outer::after {
+  top: auto;
+  right: auto;
+  bottom: 20%;
+  left: 4%;
+  width: 5px;
+  height: 5px;
+  opacity: 0.6;
+}
+
+@media (max-width: 1099px) {
+  .contact__visual {
+    display: none;
+  }
+}

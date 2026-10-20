@@ -1,0 +1,72 @@
+.scroll-indicator {
+  position: absolute;
+  left: 50%;
+  bottom: clamp(20px, 4vh, 40px);
+  z-index: 6;
+  translate: -50% 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  color: rgba(255, 255, 255, 0.72);
+  transition: color 0.3s var(--ease);
+}
+.scroll-indicator:hover {
+  color: var(--text);
+}
+/* Sits over the bright shirt, so the label gets its own small translucent pill
+   (the hero's "hover the portrait" hint uses the same pill). */
+.scroll-indicator .mono {
+  font-size: 13px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: rgba(11, 13, 15, 0.45);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+
+.scroll-indicator__track {
+  position: relative;
+  width: 1px;
+  height: 40px;
+  overflow: hidden;
+  background: rgba(236, 234, 245, 0.14);
+}
+.scroll-indicator__thumb {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1px;
+  height: 14px;
+  background: var(--accent);
+  box-shadow: 0 0 8px var(--accent-glow);
+  animation: scroll-thumb 2.2s var(--ease) infinite;
+}
+
+@keyframes scroll-thumb {
+  0% {
+    transform: translateY(-14px);
+  }
+  70%,
+  100% {
+    transform: translateY(42px);
+  }
+}
+
+@media (max-width: 899px) and (orientation: portrait), (max-aspect-ratio: 4/5) {
+  .scroll-indicator {
+    display: none;
+  }
+}
+
+/* Phones with room below the buttons: a minimal cue (just the glowing line) fills the
+   space at the bottom of the hero and invites the scroll. */
+@media (max-width: 639px) and (orientation: portrait) and (min-height: 700px) {
+  .scroll-indicator {
+    display: flex;
+    bottom: max(24px, calc(12px + env(safe-area-inset-bottom)));
+  }
+  .scroll-indicator .mono {
+    display: none;
+  }
+}

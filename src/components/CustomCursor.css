@@ -1,0 +1,75 @@
+/* Hide the system cursor only while the custom one is active (fine pointers). */
+html.has-custom-cursor,
+html.has-custom-cursor * {
+  cursor: none !important;
+}
+
+.cursor-dot,
+.cursor-ring {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 2000;
+  pointer-events: none;
+  border-radius: 50%;
+  opacity: 0;
+  will-change: transform;
+  transition: opacity 0.25s ease;
+}
+html.cursor-visible .cursor-dot,
+html.cursor-visible .cursor-ring {
+  opacity: 1;
+}
+
+/* Mint dot — the thin dark outline keeps it visible on the white sections too. */
+.cursor-dot {
+  width: 9px;
+  height: 9px;
+  margin: -4.5px 0 0 -4.5px;
+  background: #6ee7b7;
+  box-shadow:
+    0 0 0 1.5px rgba(11, 13, 15, 0.35),
+    0 0 12px rgba(110, 231, 183, 0.7);
+  transition:
+    opacity 0.25s ease,
+    width 0.25s ease,
+    height 0.25s ease,
+    margin 0.25s ease;
+}
+
+/* Soft trailing ring */
+.cursor-ring {
+  width: 34px;
+  height: 34px;
+  margin: -17px 0 0 -17px;
+  border: 1.5px solid rgba(110, 231, 183, 0.55);
+  box-shadow: 0 0 0 1px rgba(11, 13, 15, 0.08);
+  transition:
+    opacity 0.25s ease,
+    width 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    height 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    margin 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 0.3s ease,
+    border-color 0.3s ease;
+}
+
+/* Over links / buttons: ring opens up with a faint mint fill, dot shrinks */
+html.cursor-hover .cursor-ring {
+  width: 58px;
+  height: 58px;
+  margin: -29px 0 0 -29px;
+  border-color: rgba(110, 231, 183, 0.8);
+  background: rgba(110, 231, 183, 0.1);
+}
+html.cursor-hover .cursor-dot {
+  width: 5px;
+  height: 5px;
+  margin: -2.5px 0 0 -2.5px;
+}
+
+/* Press feedback */
+html.cursor-down .cursor-ring {
+  width: 26px;
+  height: 26px;
+  margin: -13px 0 0 -13px;
+}

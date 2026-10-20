@@ -1,0 +1,68 @@
+.lens {
+  --lens-r: 116px;
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.lens__reveal {
+  position: absolute;
+  inset: 0;
+  clip-path: circle(0 at 50% 50%);
+  will-change: clip-path;
+}
+
+.lens__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(0.92) contrast(1.02) brightness(0.97);
+}
+
+/* A cool mint wash: near-white areas go pale mint, the dark shirt goes deep green. */
+.lens__tint {
+  position: absolute;
+  inset: 0;
+  background: #d6fbea;
+  mix-blend-mode: multiply;
+  opacity: 0.78;
+}
+
+.lens__ring {
+  position: absolute;
+  left: calc(var(--lens-r) * -1);
+  top: calc(var(--lens-r) * -1);
+  width: calc(var(--lens-r) * 2);
+  height: calc(var(--lens-r) * 2);
+  border-radius: 50%;
+  border: 1px solid rgba(110, 231, 183, 0.55);
+  box-shadow:
+    0 0 0 1px rgba(110, 231, 183, 0.06),
+    0 0 22px rgba(110, 231, 183, 0.22),
+    inset 0 0 28px rgba(110, 231, 183, 0.14);
+  will-change: transform;
+}
+
+.lens__core {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 26px;
+  height: 26px;
+  margin: -13px 0 0 -13px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.75);
+}
+.lens__core::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 4px;
+  height: 4px;
+  margin: -2px 0 0 -2px;
+  border-radius: 50%;
+  background: #fff;
+}

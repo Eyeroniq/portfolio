@@ -1,0 +1,17 @@
+# Dependencies & build output
+node_modules
+dist
+
+# Local editor settings
+.vscode
+.idea
+
+# Raw source photos (the site uses the optimised copies in src/assets and public)
+/assets
+
+# Env & logs
+.env
+.env.*
+*.local
+*.log
+.DS_Store

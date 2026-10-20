@@ -1,0 +1,284 @@
+/*
+ * One shared orbit around the portrait (desktop / landscape).
+ * Centre = middle of the portrait (head + book). The photo is ~1.3× the viewport wide and its
+ * figure sits at ~51% of it, so x ≈ 66% of the hero; y follows the same cover maths
+ * (≈ 15vw + 22% of the hero height). The orbit centre sits a little right of the figure
+ * (69%) so the badges keep clear of the face. Radius scales with width but is capped by height.
+ */
+.orbs {
+  --orbit-x: 69%;
+  --orbit-y: calc(15vw + 22%);
+  --orbit-r: clamp(150px, min(21vw, 37svh), 420px);
+  --s: 1;
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+
+/* Faint dashed orbit line — only the right-hand arc the badges travel on */
+.orbs__ring {
+  position: absolute;
+  left: var(--orbit-x);
+  top: var(--orbit-y);
+  width: calc(var(--orbit-r) * 2);
+  height: calc(var(--orbit-r) * 2);
+  margin: calc(var(--orbit-r) * -1) 0 0 calc(var(--orbit-r) * -1);
+  border-radius: 50%;
+  /* Quiet enough to frame the portrait without competing with the name */
+  border: 1px dashed rgba(255, 255, 255, 0.08);
+  -webkit-mask-image: conic-gradient(from 0deg, transparent 14deg, #000 28deg, #000 152deg, transparent 166deg);
+  mask-image: conic-gradient(from 0deg, transparent 14deg, #000 28deg, #000 152deg, transparent 166deg);
+}
+
+/* Each badge is placed on the orbit by its angle (--a) and centred on that point */
+.orb {
+  position: absolute;
+  left: calc(var(--orbit-x) + var(--orbit-r) * cos(var(--a)));
+  top: calc(var(--orbit-y) + var(--orbit-r) * sin(var(--a)));
+  width: calc(var(--size) * var(--s));
+  height: calc(var(--size) * var(--s));
+  margin: calc(var(--size) * var(--s) / -2) 0 0 calc(var(--size) * var(--s) / -2);
+}
+
+/* Gentle ~4px vertical float, staggered per badge */
+.orb__float {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  animation: orb-float 4.2s ease-in-out var(--float-delay, 0s) infinite alternate;
+}
+
+/* The grabbable part: the badge, its ring and caption move together */
+.orb__drag {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  pointer-events: auto;
+  cursor: grab;
+  touch-action: none;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+.orb.is-dragging {
+  z-index: 10;
+}
+.orb.is-dragging .orb__drag {
+  cursor: grabbing;
+}
+
+.orb__img {
+  position: relative;
+  /* Live idle motion: continuous soft bounce + sway, staggered per badge */
+  animation: orb-jiggle 5.2s ease-in-out var(--jiggle-delay, 0s) infinite;
+  -webkit-user-drag: none;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #e9ebef;
+  filter: saturate(0.85) brightness(0.9) contrast(1.02);
+  box-shadow:
+    0 0 0 1px rgba(110, 231, 183, 0.55),
+    0 0 0 5px rgba(12, 12, 15, 0.35),
+    0 18px 40px -12px rgba(0, 0, 0, 0.7),
+    0 0 32px -6px rgba(110, 231, 183, 0.35);
+}
+
+/* Caption under the badge — phones/tablets only (see the stacked media query) */
+.orb__label {
+  display: none;
+}
+
+/* Small per-badge ring — phones only; on desktop the shared orbit replaces it */
+.orb__orbit {
+  display: none;
+  position: absolute;
+  inset: -12px;
+  border-radius: 50%;
+  border: 1px dashed rgba(236, 234, 245, 0.16);
+}
+.orb__orbit::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: -3px;
+  width: 5px;
+  height: 5px;
+  margin-top: -2.5px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 10px var(--accent-glow);
+}
+
+/*
+ * Idle life: a constant soft bounce-and-sway (small hop, tilt, slight squash) that never
+ * fully stops, plus a livelier little wobble once per cycle.
+ */
+@keyframes orb-jiggle {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg) scale(1);
+  }
+  9% {
+    transform: translateY(-3px) rotate(-1.8deg) scale(1.02);
+  }
+  18% {
+    transform: translateY(0) rotate(0deg) scale(1.01, 0.985);
+  }
+  27% {
+    transform: translateY(-3px) rotate(1.8deg) scale(1.02);
+  }
+  36% {
+    transform: translateY(0) rotate(0deg) scale(1.01, 0.985);
+  }
+  45% {
+    transform: translateY(-2px) rotate(-1.4deg) scale(1.015);
+  }
+  54% {
+    transform: translateY(0) rotate(0deg) scale(1.01, 0.985);
+  }
+  63% {
+    transform: translateY(-2px) rotate(1.4deg) scale(1.015);
+  }
+  70% {
+    transform: translateY(0) rotate(0deg) scale(1);
+  }
+  75% {
+    transform: translateY(-2px) rotate(-4deg) scale(1.03);
+  }
+  80% {
+    transform: translateY(0) rotate(3.5deg) scale(1.02);
+  }
+  85% {
+    transform: rotate(-3deg) scale(1.01);
+  }
+  91% {
+    transform: rotate(1.5deg);
+  }
+  96% {
+    transform: rotate(-0.5deg);
+  }
+}
+
+@keyframes orb-float {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(0, -4px, 0);
+  }
+}
+
+@media (max-width: 1099px) {
+  .orbs {
+    --s: 0.85;
+  }
+}
+
+@media (max-width: 899px) and (orientation: portrait), (max-aspect-ratio: 4/5) {
+  .orb--desktop,
+  .orbs__ring {
+    display: none;
+  }
+  /* Phones/tablets: fixed edge positions instead of the orbit */
+  .orb {
+    margin: 0;
+  }
+  /* Tablets: four badges, one consistent size, with readable captions. */
+  .orb {
+    width: 56px;
+    height: 56px;
+  }
+  .orb__orbit {
+    display: block;
+    inset: -7px;
+  }
+  .orb__label {
+    display: block;
+    position: absolute;
+    top: calc(100% + 11px);
+    left: 50%;
+    translate: -50% 0;
+    padding: 4px 9px;
+    border-radius: 999px;
+    background: rgba(11, 13, 15, 0.62);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+    color: #ffffff;
+    font: 500 12px/1.2 var(--font-mono);
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+  }
+  /*
+   * Two badges per side: React and FastAPI (near the left shoulder) on the left, above
+   * where the copy starts; AI and Python (beside the right forearm, past where the name
+   * and role line end) on the right. Positions are relative to the photo block.
+   */
+  .orb--python {
+    top: 53% !important;
+    right: 3% !important;
+    left: auto !important;
+  }
+  .orb--ai {
+    top: 9% !important;
+    right: 8% !important;
+    left: auto !important;
+  }
+  .orb--react {
+    top: 8% !important;
+    left: 10% !important;
+    right: auto !important;
+  }
+  .orb--fastapi {
+    top: 27% !important;
+    left: 5% !important;
+    right: auto !important;
+  }
+}
+
+/* Phones: four badges, a touch smaller, so the face and the copy stay the focus.
+   Left: React (high) and FastAPI beside the shoulder on the left of the screen.
+   Right: AI and Python. */
+@media (max-width: 639px) and (orientation: portrait) {
+  .orb {
+    width: 52px;
+    height: 52px;
+  }
+  .orb--react {
+    top: 5% !important;
+    left: 12% !important;
+  }
+  .orb--fastapi {
+    top: 25% !important;
+    left: 5% !important;
+    right: auto !important;
+  }
+  /* Clear of the (larger) name and its mint dot */
+  .orb--python {
+    top: 43% !important;
+    right: 3% !important;
+  }
+  .orb__orbit {
+    inset: -6px;
+  }
+}
+
+/* Short phones: not enough height above the name for two stacked badges + labels on each
+   side, so keep one per side (still balanced). */
+@media (max-width: 639px) and (orientation: portrait) and (max-height: 720px) {
+  .orb--react,
+  .orb--fastapi {
+    display: none;
+  }
+  .orb--ai {
+    top: 16% !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .orb__float,
+  .orb__img {
+    animation: none;
+  }
+}

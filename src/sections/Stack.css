@@ -1,0 +1,113 @@
+.stack {
+  background: var(--bg);
+  border-top: 1px solid var(--line);
+}
+
+.stack__grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 1px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--line);
+}
+
+.stack__group {
+  grid-column: span 2;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  padding: clamp(24px, 2.6vw, 36px);
+  background: var(--bg-2);
+  transition: background-color 0.4s var(--ease);
+}
+/* The first two groups (AI + Backend) are the focus, so they get wider cells. */
+.stack__group--ai,
+.stack__group--backend {
+  grid-column: span 3;
+}
+.stack__group:hover {
+  background: var(--surface-hover);
+}
+
+.stack__head {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+.stack__icon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  border: 1px solid var(--line-strong);
+  background: var(--tint);
+  color: var(--accent);
+  transition:
+    border-color 0.4s var(--ease),
+    box-shadow 0.4s var(--ease);
+}
+.stack__group:hover .stack__icon {
+  border-color: var(--accent-border);
+  box-shadow: 0 0 24px -6px var(--accent-glow);
+}
+.stack__head h3 {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+.stack__head .mono {
+  margin-top: 4px;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  color: var(--text-3);
+}
+
+.stack__items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 0;
+  margin-top: auto;
+  font-size: 15px;
+  color: var(--text-2);
+}
+.stack__items li {
+  display: inline-flex;
+  align-items: center;
+}
+.stack__items li:not(:last-child)::after {
+  content: '';
+  width: 3px;
+  height: 3px;
+  margin: 0 12px;
+  border-radius: 50%;
+  background: var(--text-3);
+}
+
+@media (max-width: 1023px) {
+  .stack__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .stack__group,
+  .stack__group--ai,
+  .stack__group--backend {
+    grid-column: span 1;
+  }
+  .stack__group--tools {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 599px) {
+  .stack__grid {
+    grid-template-columns: 1fr;
+  }
+  .stack__group--tools {
+    grid-column: span 1;
+  }
+}

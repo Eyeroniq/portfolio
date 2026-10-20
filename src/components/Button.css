@@ -1,0 +1,154 @@
+.btn {
+  --btn-h: 48px;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  height: var(--btn-h);
+  padding: 0 4px;
+  border-radius: 999px;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: -0.005em;
+  color: var(--text);
+  white-space: nowrap;
+  transition:
+    color 0.3s var(--ease),
+    background-color 0.3s var(--ease),
+    border-color 0.3s var(--ease),
+    box-shadow 0.3s var(--ease),
+    transform 0.2s var(--ease);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.btn__icon {
+  flex: none;
+  transition: transform 0.35s var(--ease);
+}
+
+.btn:active:not(.is-disabled) {
+  transform: scale(0.97);
+}
+
+/* Outlined mint pill — the primary call to action */
+.btn--primary {
+  padding: 0 24px;
+  color: var(--accent);
+  border: 1.5px solid var(--accent-border);
+  background: rgba(110, 231, 183, 0.04);
+  overflow: hidden;
+  isolation: isolate;
+}
+.btn--primary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--accent);
+  border-radius: inherit;
+  transform: translateY(101%);
+  transition: transform 0.45s var(--ease);
+}
+.btn--primary:hover {
+  color: var(--on-accent);
+  box-shadow: 0 10px 36px -10px var(--accent-glow);
+}
+.btn--primary:hover::before {
+  transform: translateY(0);
+}
+.btn--primary:hover .btn__icon {
+  transform: translateY(2px);
+}
+
+/* Solid light pill */
+.btn--solid {
+  padding: 0 24px;
+  background: var(--text);
+  color: var(--bg);
+}
+.btn--solid:hover {
+  background: var(--accent);
+  box-shadow: 0 10px 36px -10px var(--accent-glow);
+}
+.btn--solid:hover .btn__icon {
+  transform: translate(2px, -2px);
+}
+
+/* Text button with an animated underline */
+.btn--ghost .btn__label {
+  background: linear-gradient(currentColor, currentColor) 0 100% / 0% 1px no-repeat;
+  padding-bottom: 2px;
+  transition: background-size 0.4s var(--ease);
+}
+.btn--ghost:hover {
+  color: var(--accent);
+}
+.btn--ghost:hover .btn__label {
+  background-size: 100% 1px;
+}
+.btn--ghost:hover .btn__icon {
+  transform: translate(2px, -2px);
+}
+
+/* Neutral outline pill */
+.btn--outline {
+  padding: 0 22px;
+  border: 1px solid var(--line-strong);
+  background: var(--tint);
+}
+.btn--outline:hover {
+  border-color: var(--accent-border);
+  color: var(--accent);
+}
+
+.btn.is-disabled {
+  color: var(--text-3);
+  cursor: not-allowed;
+}
+.btn.is-disabled .btn__label {
+  background: none;
+}
+.btn__hint {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 6px);
+  translate: -50% 4px;
+  padding: 5px 10px;
+  border-radius: 8px;
+  background: var(--surface-2);
+  border: 1px solid var(--line-strong);
+  color: var(--text-2);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 0.2s var(--ease),
+    translate 0.2s var(--ease);
+}
+.btn.is-disabled:hover .btn__hint,
+.btn.is-disabled:focus-visible .btn__hint {
+  opacity: 1;
+  translate: -50% 0;
+}
+
+/* Touch screens: no sticky hover states after a tap */
+@media (hover: none) {
+  .btn--primary:hover {
+    color: var(--accent);
+    box-shadow: none;
+  }
+  .btn--primary:hover::before {
+    transform: translateY(101%);
+  }
+  .btn--primary:hover .btn__icon,
+  .btn--ghost:hover .btn__icon,
+  .btn--solid:hover .btn__icon {
+    transform: none;
+  }
+}
