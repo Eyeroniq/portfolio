@@ -422,6 +422,8 @@
     --media-h: min(58svh, 150vw);
     /* Dark grey (not black) base on phones, so the fade reads grey → dark grey */
     --hero-base: #2b2d31;
+    /* Brighter, crisper photo on phones */
+    --portrait-grade: contrast(1.05) brightness(0.97);
     align-items: flex-start;
   }
   .hero__content {
@@ -436,24 +438,33 @@
         0deg,
         /* Lighter, grey-toned fade: mid grey near the face → dark grey behind the copy */
         var(--hero-base) 0%,
-        rgba(43, 45, 49, 0.78) 16%,
-        rgba(46, 48, 52, 0.64) 32%,
-        rgba(46, 48, 52, 0.5) 46%,
-        rgba(58, 60, 64, 0.3) 56%,
-        rgba(66, 68, 72, 0.12) 64%,
-        rgba(70, 72, 76, 0) 72%
+        rgba(43, 45, 49, 0.74) 16%,
+        rgba(46, 48, 52, 0.52) 32%,
+        rgba(46, 48, 52, 0.34) 44%,
+        rgba(58, 60, 64, 0.16) 54%,
+        rgba(66, 68, 72, 0.05) 62%,
+        rgba(70, 72, 76, 0) 68%
       );
   }
   .hero__title {
     margin-top: 12px;
-    /* The name stays dominant on phones: it fills most of the column width */
-    font-size: clamp(46px, 17.5vw, 80px);
+    /* Bold but not overpowering on phones, so the photo and copy breathe */
+    font-size: clamp(40px, 14vw, 64px);
     letter-spacing: -0.035em;
   }
   .hero__tagline {
-    max-width: 90%;
+    max-width: 92%;
     font-size: 16px;
     line-height: 1.6;
+    /* Brighter text with a soft shadow, so it stays readable over the lighter photo */
+    color: #f1f0f6;
+    text-shadow:
+      0 1px 2px rgba(0, 0, 0, 0.55),
+      0 2px 18px rgba(0, 0, 0, 0.6);
+  }
+  .hero__role,
+  .hero__intro {
+    text-shadow: 0 1px 10px rgba(0, 0, 0, 0.6);
   }
 
   /*
