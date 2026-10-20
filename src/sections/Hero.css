@@ -375,12 +375,18 @@
     /* center top: the face sits in the upper part of the frame */
     object-position: 50% 0% !important;
   }
+  /* "HI, I'M" pill ~15% smaller on phones */
   .hero__intro {
-    height: 40px;
-    padding: 0 18px 0 16px;
+    height: 34px;
+    gap: 10px;
+    padding: 0 15px 0 14px;
+  }
+  .hero__intro .dot {
+    width: 7px;
+    height: 7px;
   }
   .hero__intro .mono {
-    font-size: 14.2px;
+    font-size: 12px;
   }
   .hero__role {
     font-size: 13px;
