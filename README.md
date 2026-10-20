@@ -74,6 +74,12 @@ To serve from a sub-path, pass `--build-arg BASE_PATH=/my-path/`.
 
 1. **Build** — `npm ci` + `npm run build`.
 2. **Docker image** — built on every run; on `main` it's pushed to `ghcr.io/<owner>/portfolio` (`latest` + short-SHA tags). Pull requests also smoke-test the container.
-3. **Deploy** — on `main`, the static build is published to **GitHub Pages** at `https://<owner>.github.io/portfolio/`.
+3. **Deploy** — on `main`, the static build is published to **GitHub Pages** at **https://dheerajc.in**.
 
-GitHub Pages must use **GitHub Actions** as its source (Settings → Pages).
+GitHub Pages must use **GitHub Actions** as its source (Settings → Pages), with `dheerajc.in` as the custom domain.
+
+### Custom domain (dheerajc.in)
+
+- `public/CNAME` holds the domain, and the workflow's `SITE_DOMAIN` must match it.
+- DNS at GoDaddy: four `A` records for `@` → `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`, and a `CNAME` for `www` → `eyeroniq.github.io`.
+- To use a different domain, change `public/CNAME`, `SITE_DOMAIN`, the URLs in `index.html` (canonical, `og:url`, `og:image`, `twitter:image`) and the domain in Settings → Pages.
