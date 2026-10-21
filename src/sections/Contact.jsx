@@ -4,12 +4,21 @@ import { links, profile, showExperience } from '../data/portfolio.js'
 import { GithubIcon, LinkedinIcon } from '../components/BrandIcons.jsx'
 import Button from '../components/Button.jsx'
 import Reveal from '../components/Reveal.jsx'
-import portrait from '../assets/portrait-960.webp'
-import reveal from '../assets/reveal-960.webp'
+import avatar480 from '../assets/avatar-480.webp'
+import avatar960 from '../assets/avatar-960.webp'
 import './Contact.css'
 
 export default function Contact() {
   const [copied, setCopied] = useState(false)
+  // Tap (phones) toggles the mint reveal on the photo; desktop uses :hover.
+  const [tinted, setTinted] = useState(false)
+  const tintTimer = useRef(0)
+  const toggleTint = () => {
+    setTinted((v) => !v)
+    clearTimeout(tintTimer.current)
+    tintTimer.current = setTimeout(() => setTinted(false), 2400)
+  }
+  useEffect(() => () => clearTimeout(tintTimer.current), [])
   const timer = useRef(0)
 
   useEffect(() => () => clearTimeout(timer.current), [])
@@ -34,12 +43,34 @@ export default function Contact() {
     <section id="contact" className="section contact" aria-labelledby="contact-title">
       <div className="contact__glow" aria-hidden="true" />
       <div className="container contact__inner">
-        <Reveal className="contact__visual" aria-hidden="true" delay={0.2} y={0}>
-          <span className="contact__orbit contact__orbit--outer" />
-          <span className="contact__orbit" />
+        {/* Circular portrait: large beside the copy on desktop, small beside the heading on
+            phones. Hover / tap reveals the mint-tinted version, like the earlier lens. */}
+        <Reveal className={`contact__visual${tinted ? ' is-tinted' : ''}`} delay={0.2} y={0} onClick={toggleTint}>
+          <span className="contact__orbit contact__orbit--outer" aria-hidden="true" />
+          <span className="contact__orbit" aria-hidden="true" />
           <span className="contact__orb">
-            <span className="contact__orb-img" style={{ backgroundImage: `url(${portrait})` }} />
-            <span className="contact__orb-img contact__orb-img--reveal" style={{ backgroundImage: `url(${reveal})` }} />
+            <img
+              className="contact__orb-img"
+              src={avatar960}
+              srcSet={`${avatar480} 480w, ${avatar960} 960w`}
+              sizes="(max-width: 1099px) 132px, 420px"
+              width="960"
+              height="960"
+              alt={`${profile.fullName}`}
+              loading="lazy"
+              decoding="async"
+            />
+            <span className="contact__orb-tint" aria-hidden="true">
+              <img
+                className="contact__orb-img"
+                src={avatar960}
+                srcSet={`${avatar480} 480w, ${avatar960} 960w`}
+                sizes="(max-width: 1099px) 132px, 420px"
+                alt=""
+                loading="lazy"
+                decoding="async"
+              />
+            </span>
           </span>
         </Reveal>
         <Reveal>

@@ -27,8 +27,8 @@ export const profile = {
 }
 
 export const links = {
-  // TODO: replace with your real address — powers every "email" action on the site.
-  email: 'hello@example.com',
+  // Powers every "email" action on the site (forwards to Gmail via Cloudflare Email Routing).
+  email: 'dheeraj@dheerajc.in',
   // TODO: e.g. 'https://github.com/your-handle'
   github: '',
   // TODO: e.g. 'https://www.linkedin.com/in/your-handle'

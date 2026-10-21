@@ -323,7 +323,7 @@
   .nav.is-scrolled,
   .nav.is-light,
   .nav.is-open {
-    padding: calc(env(safe-area-inset-top) + 8px) 10px 0;
+    padding: calc(env(safe-area-inset-top) + 6px) 10px 0;
     background: transparent;
     border-bottom-color: transparent;
     box-shadow: none;
@@ -332,16 +332,31 @@
     color: #ffffff;
     color-scheme: dark;
   }
-  /* 44px+ tap target for the brand link */
+  /* Compact capsule (~25% smaller than the original 56px bar). Controls keep a 44px tap area via ::before. */
   .nav__brand {
+    position: relative;
     align-items: center;
-    min-height: 44px;
+    font-size: 13.3px;
+  }
+  .nav__brand::before,
+  .nav .nav__toggle::before,
+  .nav .nav__status::before {
+    content: '';
+    position: absolute;
+    inset: -5px;
+  }
+  .nav__brand-dot {
+    width: 5px;
+    height: 5px;
+  }
+  .nav__end {
+    gap: 8px;
   }
   .nav__inner,
   .nav.is-scrolled .nav__inner {
-    height: 56px;
+    height: 43px;
     max-width: none;
-    padding: 0 6px 0 20px;
+    padding: 0 5px 0 15px;
     border-radius: 999px;
     border: 1px solid rgba(255, 255, 255, 0.14);
     background: rgba(0, 0, 0, 0.35);
@@ -372,7 +387,22 @@
     backdrop-filter: none;
   }
   .nav .nav__status {
-    height: 44px;
+    position: relative;
+    height: 33px;
+    padding: 0 10px;
+    gap: 7px;
+  }
+  .nav .nav__status .mono {
+    font-size: 10.5px;
+  }
+  .nav .nav__toggle {
+    position: relative;
+    width: 34px;
+    height: 34px;
+  }
+  .nav .nav__toggle svg {
+    width: 16px;
+    height: 16px;
   }
   .nav .nav__status .dot,
   .nav.is-light .nav__status .dot {

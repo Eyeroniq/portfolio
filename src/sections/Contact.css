@@ -150,27 +150,39 @@
 .contact__orb-img {
   position: absolute;
   inset: 0;
-  background-size: auto 250%;
-  background-position: 52% 34%;
-  filter: grayscale(0.2) contrast(1.05) brightness(0.92);
-  transition:
-    clip-path 0.9s var(--ease),
-    filter 0.6s var(--ease);
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.8s var(--ease);
 }
-.contact__orb-img--reveal {
-  filter: saturate(0.92) brightness(0.97);
+.contact__visual:hover .contact__orb-img {
+  transform: scale(1.04);
+}
+/* Mint reveal: the same photo, tinted mint, opens as a circle on hover / tap */
+.contact__orb-tint {
+  position: absolute;
+  inset: 0;
   clip-path: circle(0% at 50% 50%);
+  transition: clip-path 0.9s var(--ease);
 }
-.contact__orb-img--reveal::after {
+.contact__orb-tint .contact__orb-img {
+  filter: grayscale(1) contrast(1.08) brightness(1.02);
+}
+.contact__orb-tint::after {
   content: '';
   position: absolute;
   inset: 0;
   background: #d6fbea;
   mix-blend-mode: multiply;
-  opacity: 0.85;
+  opacity: 0.9;
 }
-.contact__visual:hover .contact__orb-img--reveal {
+.contact__visual:hover .contact__orb-tint,
+.contact__visual.is-tinted .contact__orb-tint {
   clip-path: circle(75% at 50% 50%);
+}
+.contact__visual {
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 }
 .contact__orbit {
   position: absolute;
@@ -204,8 +216,54 @@
   opacity: 0.6;
 }
 
+/*
+ * Tablets & phones: a small, clean circular photo to the right of the heading, beside its
+ * first three lines ("HAVE A / PROBLEM / WORTH"). The heading always wraps into those four
+ * lines here (max-width in em), so the space beside them exists on every phone width.
+ */
 @media (max-width: 1099px) {
+  .contact__title {
+    max-width: 5.2em;
+  }
   .contact__visual {
+    position: absolute;
+    /* Top aligned with "HAVE A"; as large as the space beside "PROBLEM" allows */
+    top: 56px;
+    right: var(--gutter);
+    /* Fits beside lines 1–3 and stays clear of "AUTOMATING?" below */
+    width: clamp(88px, calc(100vw - 268px), 104px);
+    margin: 0;
+    z-index: 1;
+  }
+  .contact__orb {
+    box-shadow:
+      0 0 0 1px rgba(110, 231, 183, 0.5),
+      0 0 0 5px var(--bg),
+      0 0 0 6px rgba(110, 231, 183, 0.18),
+      0 16px 36px -14px var(--shadow);
+  }
+  .contact__orbit--outer {
     display: none;
+  }
+  .contact__orbit {
+    inset: -9px;
+  }
+  .contact__orbit::after {
+    width: 6px;
+    height: 6px;
+    top: 10%;
+    right: 6%;
+  }
+}
+
+/* Very narrow phones (< 360px): no room beside "PROBLEM", so the photo sits small above
+   the "contact" label instead */
+@media (max-width: 359px) {
+  .contact__visual {
+    position: relative;
+    top: auto;
+    right: auto;
+    width: 76px;
+    margin: 0 0 24px 9px;
   }
 }
