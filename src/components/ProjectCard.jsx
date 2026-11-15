@@ -44,7 +44,7 @@ export default function ProjectCard({ project, index, className = '' }) {
             <img
               className="project-card__img"
               src={project.image}
-              alt={`${project.title} screenshot`}
+              alt={project.imageAlt || `${project.title} screenshot`}
               loading="lazy"
               decoding="async"
               onError={() => setImageFailed(true)}

@@ -120,7 +120,50 @@ function Shop() {
   )
 }
 
-const VARIANTS = { workflow: Workflow, terminal: Terminal, board: Board, shop: Shop }
+function Storage() {
+  // memtable + WAL on top, then levels that grow 10x deeper down (L0, L1, L2)
+  const levels = [
+    { y: 92, n: 2, label: 'L0' },
+    { y: 118, n: 4, label: 'L1' },
+    { y: 144, n: 8, label: 'L2' },
+  ]
+  return (
+    <svg viewBox="0 0 400 180" className="pv-svg pv-storage" role="presentation">
+      <g className="pv-node pv-storage__mem" transform="translate(150 22)">
+        <rect width="100" height="30" rx="8" />
+        <text x="50" y="19.5" textAnchor="middle">
+          memtable
+        </text>
+      </g>
+      <g className="pv-node" transform="translate(40 22)">
+        <rect width="70" height="30" rx="8" />
+        <text x="35" y="19.5" textAnchor="middle">
+          WAL
+        </text>
+      </g>
+      <g className="pv-wires">
+        <path d="M110 37 H150" />
+        <path d="M200 52 V88" />
+      </g>
+      {levels.map((lvl) => (
+        <g key={lvl.label} className="pv-storage__level">
+          <text className="pv-storage__label" x="40" y={lvl.y + 12}>
+            {lvl.label}
+          </text>
+          {Array.from({ length: lvl.n }, (_, i) => {
+            const w = (300 - 4 * (lvl.n - 1)) / lvl.n
+            return <rect key={i} x={70 + i * (w + 4)} y={lvl.y} width={w} height="16" rx="3" />
+          })}
+        </g>
+      ))}
+      <circle className="pv-pulse" r="3.5">
+        <animateMotion dur="2.4s" repeatCount="indefinite" path="M110 37 H150 M200 52 V88" />
+      </circle>
+    </svg>
+  )
+}
+
+const VARIANTS = { workflow: Workflow, terminal: Terminal, board: Board, shop: Shop, storage: Storage }
 
 function ProjectPreview({ variant }) {
   const Variant = VARIANTS[variant] ?? Workflow

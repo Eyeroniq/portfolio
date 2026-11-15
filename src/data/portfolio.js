@@ -7,6 +7,12 @@
  *  • Anything marked TODO is placeholder content you should replace.
  */
 
+import fraudgraphImg from '../assets/projects/fraudgraph.webp'
+import flowforgeImg from '../assets/projects/flowforge.webp'
+import creditcastImg from '../assets/projects/creditcast.webp'
+import autochatImg from '../assets/projects/autochat.webp'
+import supersaintImg from '../assets/projects/supersaint.webp'
+
 export const profile = {
   name: 'Dheeraj',
   // Full name — used wherever search engines and screen readers read who this is.
@@ -102,74 +108,159 @@ export const stack = [
 
 /**
  * Projects — shown as short case studies.
+ *  - `featured: true` projects are always visible; the rest appear under "Show more".
  *  - `problem` (optional): one line on what the project solves.
  *  - `approach` (optional): 2–3 engineering points (architecture, key decisions).
- *  - `results` (optional): ONLY verified outcomes. Nothing is shown when empty.
- *  - `preview` picks the built-in illustrated preview: 'workflow' | 'terminal' | 'board' | 'shop'
- *  - `image` (optional): import a real screenshot and set it here to replace the illustration.
- *  - `github` / `live`: leave '' until you have real URLs (the link is hidden until then).
- * TODO: review `problem` / `approach` — written only from the stack you listed; no metrics claimed.
+ *  - `results` (optional): ONLY verified outcomes, as measured in the project's own repo.
+ *  - `image`: a real screenshot; `preview` ('workflow' | 'terminal' | 'board' | 'shop' |
+ *    'storage') is the illustrated fallback when there is no image.
+ *  - `github` / `live`: leave '' to hide that link.
  */
 export const projects = [
   {
-    id: 'autoflow',
-    title: 'AutoFlow',
-    kind: 'AI automation',
-    description: 'AI-powered workflow automation for Gmail.',
-    problem: 'Repetitive inbox work follows patterns a language model can take over.',
+    id: 'fraudgraph',
+    featured: true,
+    title: 'FraudGraph',
+    kind: 'AI · payments risk',
+    description:
+      'A pre-authorisation risk service for a payment switch: every payment is approved, stepped up (OTP / 3DS), sent to review or blocked — chosen by expected cost, in about a millisecond.',
+    problem: 'A single fraud threshold either blocks good customers or lets fraud through, and fraud labels arrive late.',
     approach: [
-      'FastAPI service receives inbox events and exposes the automation API.',
-      'Celery workers on a Redis queue run LLM-driven actions asynchronously, so the API stays responsive.',
+      'Payment-graph features (new receiving accounts, bursts of new senders) on top of tabular signals, scored by LightGBM.',
+      'Conformal prediction sets so the model says when it is unsure; a cost-based policy picks the action.',
+      'FastAPI + Redis + PostgreSQL service built to learn from delayed labels and watch for drift; CI on Ubuntu and Windows.',
     ],
-    results: [],
-    tags: ['FastAPI', 'Celery', 'Redis', 'Python', 'LLM'],
-    preview: 'workflow',
-    image: null,
-    github: '',
+    results: [
+      '0.12 ms p95 per decision (features + model, CPU); about 1 ms through the API.',
+      'Graph features halve test cost versus the tabular baseline (133M → 66M).',
+      'Full policy: 66M test cost versus 154M for a single global threshold (PaySim, simulated data).',
+    ],
+    tags: ['Python', 'LightGBM', 'FastAPI', 'Redis', 'PostgreSQL', 'Conformal prediction'],
+    preview: 'board',
+    image: fraudgraphImg,
+    imageAlt: "FraudGraph chart: which feature groups drive the model's scores",
+    github: 'https://github.com/Eyeroniq/fraudGraphAi',
     live: '',
   },
   {
-    id: 'sage-cli',
-    title: 'Sage CLI',
-    kind: 'Developer tool',
-    description: 'An AI developer tool that lives in the terminal.',
-    problem: 'Jumping between the terminal and a chat window breaks a developer’s flow.',
-    approach: ['Brings an LLM assistant into the command-line workflow developers already use.'],
+    id: 'flowforge',
+    featured: true,
+    title: 'FlowForge AI',
+    kind: 'AI automation platform',
+    description:
+      'A visual, self-hostable AI workflow builder: drag nodes onto a canvas, wire them together and run them live, on a schedule, or from an email, webhook or Telegram message.',
+    problem: 'Automating everyday AI tasks usually means writing glue code for every model and every app.',
+    approach: [
+      '55 node types — LLMs, documents/OCR, audio, RAG, web, Gmail, Telegram, Discord, Notion, Airtable — on free-tier services by default.',
+      'Next.js + React Flow editor; FastAPI API with Celery workers on Redis and PostgreSQL.',
+      'Self-hosts with Docker Compose in three commands; JWT auth and encrypted credentials.',
+    ],
     results: [],
-    tags: ['CLI', 'LLM', 'Developer tooling'],
+    tags: ['FastAPI', 'Celery', 'Redis', 'PostgreSQL', 'Next.js', 'React Flow', 'Docker'],
+    preview: 'workflow',
+    image: flowforgeImg,
+    imageAlt: 'FlowForge AI editor with a summarise-and-email workflow on the canvas',
+    github: 'https://github.com/Eyeroniq/AutoFlow-Ai',
+    live: '',
+  },
+  {
+    id: 'lsm-tree',
+    featured: true,
+    title: 'lsm-tree',
+    kind: 'Systems · storage engine',
+    description: 'A dependency-free C++17 log-structured merge-tree storage engine, built from first principles.',
+    problem: "A write isn't complete when it reaches memory — it's complete when a restart can prove it survived.",
+    approach: [
+      'fsync-backed, checksummed write-ahead log that survives process crashes and simulated power loss.',
+      'Checksummed SSTables of ~4 KB prefix-compressed blocks, Bloom filters and a sharded LRU block cache.',
+      'Leveled compaction (each level 10× the one above), a C API and a Java server.',
+    ],
+    results: [
+      '3.11M cached point reads per second on 4 threads (12-core machine).',
+      'Write amplification cut from 77× to 33× at 300k keys versus full compaction.',
+    ],
+    tags: ['C++17', 'Storage engines', 'WAL', 'Bloom filters', 'Java'],
+    preview: 'storage',
+    image: null,
+    github: 'https://github.com/Eyeroniq/lsm-tree',
+    live: '',
+  },
+  {
+    id: 'creditcast',
+    featured: true,
+    title: 'CreditCast',
+    kind: 'ML · credit risk',
+    description:
+      'A bank-style credit-risk platform: a calibrated probability-of-default model (regulatory scorecard plus an ML challenger), LGD and EAD combined into Expected Loss — with a live what-if dashboard.',
+    problem: 'A credit model has to be validated, explained and monitored, not just accurate.',
+    approach: [
+      'WoE scorecard and LightGBM challenger, calibrated, with out-of-time validation (Gini, KS, PSI).',
+      'SHAP reason codes, fairness testing and drift monitoring; FastAPI service and Next.js dashboard.',
+      'Bronze → Silver → Gold data pipeline with an optional PySpark engine. Built with a teammate.',
+    ],
+    results: ['120+ tests including an end-to-end lifecycle; CI enforces performance gates and an 80% coverage floor.'],
+    tags: ['Python', 'LightGBM', 'SHAP', 'FastAPI', 'Next.js', 'PySpark'],
+    preview: 'board',
+    image: creditcastImg,
+    imageAlt: 'CreditCast dashboard scoring a loan applicant live',
+    github: 'https://github.com/sidnov6/CreditForge',
+    live: 'https://huggingface.co/spaces/sidnov6/CreditForge',
+  },
+  {
+    id: 'sagecli',
+    title: 'SageCLI',
+    kind: 'Developer tool · local LLM',
+    description:
+      'Offline plain-English to Bash for Linux: a local Phi-3 Mini model writes one command, a safety layer checks it, and nothing runs until you confirm.',
+    problem: 'Natural-language shells are useful, but a wrong or malicious command can wreck a system.',
+    approach: [
+      'Runs on the CPU with no cloud APIs and no telemetry.',
+      'Two-layer safety validator (regex rules + bashlex structural parsing): SAFE / WARN / BLOCK, plus a sandbox preview.',
+    ],
+    results: ['Adversarial benchmark: blocks 68/68 attack commands (60/68 with regex alone) and 0/41 safe ones.'],
+    tags: ['Python', 'Phi-3 Mini', 'bashlex', 'Typer'],
     preview: 'terminal',
     image: null,
-    github: '',
+    github: 'https://github.com/Eyeroniq/SageCLI',
     live: '',
   },
   {
-    id: 'task-manager',
-    title: 'Real-time Task Manager',
-    kind: 'Full-stack app',
-    description: 'A collaborative task manager for teams.',
-    problem: 'Everyone on a team should see task changes the moment they happen — and only the right people should make them.',
+    id: 'autochat',
+    title: 'AutoChat',
+    kind: 'AI · RAG assistant',
+    description:
+      'A self-hosted RAG chat assistant: upload documents, spreadsheets or a Google Sheet and get answers with citations.',
+    problem: 'Teams want answers from their own files and databases without sending them to a closed tool.',
     approach: [
-      'Socket.IO pushes every change to connected clients in real time.',
-      'Role-based access control enforced on the Express API, with PostgreSQL as the source of truth.',
+      'API compatible with the Anthropic Messages API, so existing clients and SDKs work unchanged; any OpenAI-compatible model can power it.',
+      'Qdrant vector store and local embeddings; tools for SQL databases and code execution.',
+      'Usage dashboard with p50/p95 latency, time to first token and token totals.',
     ],
     results: [],
-    tags: ['React', 'Express', 'PostgreSQL', 'Socket.IO', 'RBAC'],
-    preview: 'board',
-    image: null,
-    github: '',
+    tags: ['Python', 'FastAPI', 'LlamaIndex', 'Qdrant', 'Ollama'],
+    preview: 'workflow',
+    image: autochatImg,
+    imageAlt: 'AutoChat answering a question from a SQL database with tool calls',
+    github: 'https://github.com/Eyeroniq/Autochat',
     live: '',
   },
   {
-    id: '40god',
-    title: '40God',
-    kind: 'E-commerce',
-    description:
-      'An e-commerce project covering the storefront experience — product browsing, product pages, and the path to checkout.',
-    // TODO: add the real stack used for this project.
-    tags: ['E-commerce', 'Web'],
+    id: 'supersaint',
+    title: 'Super Saint',
+    kind: 'Full-stack e-commerce',
+    description: 'A full-stack e-commerce store for fitted essentials, with an admin dashboard and built-in analytics.',
+    problem: 'A small brand needs a store, payments and the numbers to run it in one place.',
+    approach: [
+      'TypeScript end to end: React + Redux Toolkit (RTK Query), Node.js/Express, MongoDB; JWT auth with bcrypt.',
+      'Razorpay (UPI, cards, netbanking, wallets) and Cash on Delivery.',
+      "Analytics: funnel, cohorts, RFM and A/B statistics (two-proportion z-test, Welch's t-test).",
+    ],
+    results: ['Covering indexes cut 30-day analytics queries from 1.4–3.1 s to 14–407 ms; cached responses in about 2 ms.'],
+    tags: ['TypeScript', 'React', 'Node.js', 'Express', 'MongoDB', 'Razorpay'],
     preview: 'shop',
-    image: null,
-    github: '',
+    image: supersaintImg,
+    imageAlt: 'Super Saint analytics overview dashboard',
+    github: 'https://github.com/Eyeroniq/supersaint',
     live: '',
   },
 ]

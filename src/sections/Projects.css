@@ -18,6 +18,19 @@
   grid-column: span 5;
 }
 
+/* "Show more": the extra projects sit three across, under the featured four */
+.projects__grid--more {
+  margin-top: clamp(16px, 2vw, 24px);
+}
+.projects__grid--more > * {
+  grid-column: span 4 !important;
+}
+.projects__more {
+  display: flex;
+  justify-content: center;
+  margin-top: clamp(28px, 4vw, 44px);
+}
+
 @media (max-width: 1023px) {
   .projects__grid > * {
     grid-column: span 6 !important;
@@ -27,5 +40,13 @@
 @media (max-width: 719px) {
   .projects__grid > * {
     grid-column: 1 / -1 !important;
+  }
+}
+
+/* Narrower three-across cards: put "Problem / Approach / Results" labels above their text */
+@media (min-width: 1024px) {
+  .projects__grid--more .project-card__part {
+    grid-template-columns: 1fr;
+    gap: 4px;
   }
 }

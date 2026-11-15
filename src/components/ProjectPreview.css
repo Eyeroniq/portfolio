@@ -75,6 +75,26 @@
   }
 }
 
+/* ── Storage (LSM levels) ── */
+.pv-storage__level rect {
+  fill: var(--pv-surface);
+  stroke: rgba(var(--pv-ink), 0.16);
+}
+.pv-storage__level:first-of-type rect {
+  stroke: rgba(110, 231, 183, 0.7);
+}
+.pv-storage__label {
+  fill: var(--text-3);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+}
+.pv-storage__mem rect {
+  stroke: rgba(110, 231, 183, 0.7);
+}
+.pv-storage__mem text {
+  fill: var(--accent);
+}
+
 /* ── Terminal ── */
 .pv-term {
   position: relative;
