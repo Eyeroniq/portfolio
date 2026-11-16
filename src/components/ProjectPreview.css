@@ -58,6 +58,7 @@
   fill: var(--text-2);
   font-family: var(--font-mono);
   font-size: 10.5px;
+  letter-spacing: -0.02em;
 }
 .pv-node:last-of-type rect {
   stroke: rgba(110, 231, 183, 0.7);

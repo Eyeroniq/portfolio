@@ -7,12 +7,6 @@
  *  • Anything marked TODO is placeholder content you should replace.
  */
 
-import fraudgraphImg from '../assets/projects/fraudgraph.webp'
-import flowforgeImg from '../assets/projects/flowforge.webp'
-import creditcastImg from '../assets/projects/creditcast.webp'
-import autochatImg from '../assets/projects/autochat.webp'
-import supersaintImg from '../assets/projects/supersaint.webp'
-
 export const profile = {
   name: 'Dheeraj',
   // Full name — used wherever search engines and screen readers read who this is.
@@ -112,8 +106,8 @@ export const stack = [
  *  - `problem` (optional): one line on what the project solves.
  *  - `approach` (optional): 2–3 engineering points (architecture, key decisions).
  *  - `results` (optional): ONLY verified outcomes, as measured in the project's own repo.
- *  - `image`: a real screenshot; `preview` ('workflow' | 'terminal' | 'board' | 'shop' |
- *    'storage') is the illustrated fallback when there is no image.
+ *  - `preview`: the animated card — 'workflow' | 'fraud' | 'credit' | 'sage' | 'rag' |
+ *    'commerce' | 'storage'. Set `image` to a screenshot import to show that instead.
  *  - `github` / `live`: leave '' to hide that link.
  */
 export const projects = [
@@ -136,9 +130,8 @@ export const projects = [
       'Full policy: 66M test cost versus 154M for a single global threshold (PaySim, simulated data).',
     ],
     tags: ['Python', 'LightGBM', 'FastAPI', 'Redis', 'PostgreSQL', 'Conformal prediction'],
-    preview: 'board',
-    image: fraudgraphImg,
-    imageAlt: "FraudGraph chart: which feature groups drive the model's scores",
+    preview: 'fraud',
+    image: null,
     github: 'https://github.com/Eyeroniq/fraudGraphAi',
     live: '',
   },
@@ -158,8 +151,7 @@ export const projects = [
     results: [],
     tags: ['FastAPI', 'Celery', 'Redis', 'PostgreSQL', 'Next.js', 'React Flow', 'Docker'],
     preview: 'workflow',
-    image: flowforgeImg,
-    imageAlt: 'FlowForge AI editor with a summarise-and-email workflow on the canvas',
+    image: null,
     github: 'https://github.com/Eyeroniq/AutoFlow-Ai',
     live: '',
   },
@@ -200,9 +192,8 @@ export const projects = [
     ],
     results: ['120+ tests including an end-to-end lifecycle; CI enforces performance gates and an 80% coverage floor.'],
     tags: ['Python', 'LightGBM', 'SHAP', 'FastAPI', 'Next.js', 'PySpark'],
-    preview: 'board',
-    image: creditcastImg,
-    imageAlt: 'CreditCast dashboard scoring a loan applicant live',
+    preview: 'credit',
+    image: null,
     github: 'https://github.com/sidnov6/CreditForge',
     live: 'https://huggingface.co/spaces/sidnov6/CreditForge',
   },
@@ -219,7 +210,7 @@ export const projects = [
     ],
     results: ['Adversarial benchmark: blocks 68/68 attack commands (60/68 with regex alone) and 0/41 safe ones.'],
     tags: ['Python', 'Phi-3 Mini', 'bashlex', 'Typer'],
-    preview: 'terminal',
+    preview: 'sage',
     image: null,
     github: 'https://github.com/Eyeroniq/SageCLI',
     live: '',
@@ -238,9 +229,8 @@ export const projects = [
     ],
     results: [],
     tags: ['Python', 'FastAPI', 'LlamaIndex', 'Qdrant', 'Ollama'],
-    preview: 'workflow',
-    image: autochatImg,
-    imageAlt: 'AutoChat answering a question from a SQL database with tool calls',
+    preview: 'rag',
+    image: null,
     github: 'https://github.com/Eyeroniq/Autochat',
     live: '',
   },
@@ -257,9 +247,8 @@ export const projects = [
     ],
     results: ['Covering indexes cut 30-day analytics queries from 1.4–3.1 s to 14–407 ms; cached responses in about 2 ms.'],
     tags: ['TypeScript', 'React', 'Node.js', 'Express', 'MongoDB', 'Razorpay'],
-    preview: 'shop',
-    image: supersaintImg,
-    imageAlt: 'Super Saint analytics overview dashboard',
+    preview: 'commerce',
+    image: null,
     github: 'https://github.com/Eyeroniq/supersaint',
     live: '',
   },

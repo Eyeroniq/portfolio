@@ -7,14 +7,36 @@ import './ProjectPreview.css'
  * with skeleton content — no fake data, metrics, or UI copy.
  */
 
-function Workflow() {
-  const nodes = [
-    { x: 24, y: 70, label: 'Gmail' },
-    { x: 124, y: 70, label: 'FastAPI' },
-    { x: 224, y: 30, label: 'Celery' },
-    { x: 224, y: 110, label: 'Redis' },
-    { x: 324, y: 70, label: 'LLM' },
-  ]
+/*
+ * Animated pipeline: five labelled nodes (one in, one through, a fork of two, one out),
+ * dashed wires that flow on hover, and a mint pulse travelling along the top route.
+ * Every project gets the same card, labelled with the stages of its own architecture;
+ * the last node is the outcome and is drawn in mint.
+ */
+const FLOWS = {
+  // FlowForge AI (the original card)
+  workflow: ['Gmail', 'FastAPI', 'Celery', 'Redis', 'LLM'],
+  // FraudGraph: payment -> graph features -> model + uncertainty -> cost-based policy
+  fraud: ['Payment', 'Graph', 'LightGBM', 'Conformal', 'Policy'],
+  // CreditCast: loan data -> pipeline -> scorecard + ML challenger -> expected loss
+  credit: ['Loans', 'Pipeline', 'Scorecard', 'LightGBM', 'EL'],
+  // SageCLI: English -> local model -> two safety layers -> confirm before running
+  sage: ['English', 'Phi-3', 'Regex', 'bashlex', 'Confirm'],
+  // AutoChat: documents -> embeddings -> vector search + tools -> cited answer
+  rag: ['Docs', 'Embed', 'Qdrant', 'Tools', 'Answer'],
+  // Super Saint: storefront -> API -> database + payments -> analytics
+  commerce: ['React', 'Express', 'MongoDB', 'Razorpay', 'Analytics'],
+}
+
+const FLOW_LAYOUT = [
+  { x: 24, y: 70 },
+  { x: 124, y: 70 },
+  { x: 224, y: 30 },
+  { x: 224, y: 110 },
+  { x: 324, y: 70 },
+]
+
+function Flow({ labels }) {
   return (
     <svg viewBox="0 0 400 180" className="pv-svg" role="presentation">
       <g className="pv-wires">
@@ -24,11 +46,11 @@ function Workflow() {
         <path d="M284 45 C304 45 304 85 324 85" />
         <path d="M284 125 C304 125 304 85 324 85" />
       </g>
-      {nodes.map((n) => (
-        <g key={n.label} className="pv-node" transform={`translate(${n.x} ${n.y})`}>
+      {FLOW_LAYOUT.map((pos, i) => (
+        <g key={labels[i]} className="pv-node" transform={`translate(${pos.x} ${pos.y})`}>
           <rect width="60" height="30" rx="8" />
           <text x="30" y="19.5" textAnchor="middle">
-            {n.label}
+            {labels[i]}
           </text>
         </g>
       ))}
@@ -163,14 +185,14 @@ function Storage() {
   )
 }
 
-const VARIANTS = { workflow: Workflow, terminal: Terminal, board: Board, shop: Shop, storage: Storage }
+const VARIANTS = { terminal: Terminal, board: Board, shop: Shop, storage: Storage }
 
 function ProjectPreview({ variant }) {
-  const Variant = VARIANTS[variant] ?? Workflow
+  const Variant = VARIANTS[variant]
   return (
     <div className={`pv pv--${variant}`} aria-hidden="true">
       <div className="pv__grid" />
-      <Variant />
+      {Variant ? <Variant /> : <Flow labels={FLOWS[variant] ?? FLOWS.workflow} />}
     </div>
   )
 }
