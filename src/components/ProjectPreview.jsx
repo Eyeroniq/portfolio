@@ -2,41 +2,21 @@ import { memo } from 'react'
 import './ProjectPreview.css'
 
 /*
- * Abstract, illustrated previews used until real screenshots are added.
- * They depict the *shape* of each project (a pipeline, a terminal, a board, a store)
- * with skeleton content — no fake data, metrics, or UI copy.
+ * Animated, illustrated previews — one card type per kind of project (a pipeline, a payment
+ * graph, a risk dashboard, a terminal, a chat window, a shop, a storage engine), all in the
+ * same visual language: mono labels, hairline surfaces, a mint accent and a gentle loop.
+ * They depict the *shape* of each project; labels name its parts, never invented metrics.
  */
 
-/*
- * Animated pipeline: five labelled nodes (one in, one through, a fork of two, one out),
- * dashed wires that flow on hover, and a mint pulse travelling along the top route.
- * Every project gets the same card, labelled with the stages of its own architecture;
- * the last node is the outcome and is drawn in mint.
- */
-const FLOWS = {
-  // FlowForge AI (the original card)
-  workflow: ['Gmail', 'FastAPI', 'Celery', 'Redis', 'LLM'],
-  // FraudGraph: payment -> graph features -> model + uncertainty -> cost-based policy
-  fraud: ['Payment', 'Graph', 'LightGBM', 'Conformal', 'Policy'],
-  // CreditCast: loan data -> pipeline -> scorecard + ML challenger -> expected loss
-  credit: ['Loans', 'Pipeline', 'Scorecard', 'LightGBM', 'EL'],
-  // SageCLI: English -> local model -> two safety layers -> confirm before running
-  sage: ['English', 'Phi-3', 'Regex', 'bashlex', 'Confirm'],
-  // AutoChat: documents -> embeddings -> vector search + tools -> cited answer
-  rag: ['Docs', 'Embed', 'Qdrant', 'Tools', 'Answer'],
-  // Super Saint: storefront -> API -> database + payments -> analytics
-  commerce: ['React', 'Express', 'MongoDB', 'Razorpay', 'Analytics'],
-}
-
-const FLOW_LAYOUT = [
-  { x: 24, y: 70 },
-  { x: 124, y: 70 },
-  { x: 224, y: 30 },
-  { x: 224, y: 110 },
-  { x: 324, y: 70 },
-]
-
-function Flow({ labels }) {
+/* FlowForge AI — a node pipeline with a pulse travelling along it */
+function Workflow() {
+  const nodes = [
+    { x: 24, y: 70, label: 'Gmail' },
+    { x: 124, y: 70, label: 'FastAPI' },
+    { x: 224, y: 30, label: 'Celery' },
+    { x: 224, y: 110, label: 'Redis' },
+    { x: 324, y: 70, label: 'LLM' },
+  ]
   return (
     <svg viewBox="0 0 400 180" className="pv-svg" role="presentation">
       <g className="pv-wires">
@@ -46,11 +26,11 @@ function Flow({ labels }) {
         <path d="M284 45 C304 45 304 85 324 85" />
         <path d="M284 125 C304 125 304 85 324 85" />
       </g>
-      {FLOW_LAYOUT.map((pos, i) => (
-        <g key={labels[i]} className="pv-node" transform={`translate(${pos.x} ${pos.y})`}>
+      {nodes.map((n) => (
+        <g key={n.label} className="pv-node" transform={`translate(${n.x} ${n.y})`}>
           <rect width="60" height="30" rx="8" />
           <text x="30" y="19.5" textAnchor="middle">
-            {labels[i]}
+            {n.label}
           </text>
         </g>
       ))}
@@ -65,66 +45,153 @@ function Flow({ labels }) {
   )
 }
 
-function Terminal() {
+/* FraudGraph — a payment crosses the account graph, then one of four decisions lights up */
+function Fraud() {
+  const accounts = [
+    [40, 90],
+    [96, 42],
+    [96, 138],
+    [150, 90],
+    [204, 46],
+    [204, 134],
+  ]
+  const edges = [
+    [0, 1],
+    [0, 2],
+    [1, 3],
+    [2, 3],
+    [3, 4],
+    [3, 5],
+    [1, 4],
+  ]
+  const decisions = ['approve', 'step-up', 'review', 'block']
   return (
-    <div className="pv-term">
+    <svg viewBox="0 0 400 180" className="pv-svg pv-fraud" role="presentation">
+      <g className="pv-fraud__edges">
+        {edges.map(([a, b]) => (
+          <line key={`${a}-${b}`} x1={accounts[a][0]} y1={accounts[a][1]} x2={accounts[b][0]} y2={accounts[b][1]} />
+        ))}
+        <path className="pv-fraud__out" d="M164 90 H262" />
+      </g>
+      {accounts.map(([x, y], i) => (
+        <circle key={i} className={`pv-fraud__acct${i === 3 ? ' is-payee' : ''}`} cx={x} cy={y} r={i === 3 ? 13 : 9} />
+      ))}
+      {decisions.map((d, i) => (
+        <g key={d} className="pv-fraud__chip" style={{ '--i': i }} transform={`translate(270 ${18 + i * 38})`}>
+          <rect width="104" height="26" rx="13" />
+          <text x="52" y="17" textAnchor="middle">
+            {d}
+          </text>
+        </g>
+      ))}
+      <circle className="pv-pulse" r="3.5">
+        <animateMotion dur="2.8s" repeatCount="indefinite" path="M40 90 L96 42 L150 90 L262 90" />
+      </circle>
+    </svg>
+  )
+}
+
+/* CreditCast — PD / LGD / EAD bars, a sliding risk grade and the decision it leads to */
+function Credit() {
+  const grades = ['AAA', 'AA', 'A', 'BBB', 'BB', 'B']
+  return (
+    <div className="pv-credit">
+      <div className="pv-credit__head">
+        <span className="pv-credit__title">score applicant</span>
+        <span className="pv-credit__decision">
+          <b className="is-approve">approve</b>
+          <b className="is-decline">decline</b>
+        </span>
+      </div>
+      {['PD', 'LGD', 'EAD'].map((k, i) => (
+        <div className="pv-credit__row" key={k}>
+          <span>{k}</span>
+          <i style={{ '--i': i }} />
+        </div>
+      ))}
+      <div className="pv-credit__grades">
+        {grades.map((g) => (
+          <span key={g}>{g}</span>
+        ))}
+        <i className="pv-credit__marker" />
+      </div>
+      <p className="pv-credit__formula">EL = PD × LGD × EAD</p>
+    </div>
+  )
+}
+
+/* SageCLI — English in, one command out, a safety verdict, and nothing runs until "y" */
+function Sage() {
+  return (
+    <div className="pv-term pv-sage">
       <div className="pv-term__bar">
         <i />
         <i />
         <i />
-        <span>sage</span>
+        <span>sage · offline</span>
       </div>
       <div className="pv-term__body">
-        <p>
-          <b>$</b> sage
+        <p className="pv-sage__ask">
+          <b>$</b> sage <span className="pv-sage__typed">"show the largest files"</span>
+        </p>
+        <p className="pv-sage__cmd">find . -type f -exec du -h {'{}'} + | sort -rh</p>
+        <p className="pv-sage__risk">
+          Risk: <em>SAFE</em>
+        </p>
+        <p className="pv-sage__confirm">
+          Run this command? [y/N]
           <span className="pv-caret" />
         </p>
-        <span className="pv-line" style={{ width: '62%' }} />
-        <span className="pv-line pv-line--accent" style={{ width: '38%' }} />
-        <span className="pv-line" style={{ width: '74%' }} />
-        <span className="pv-line" style={{ width: '51%' }} />
-        <span className="pv-line pv-line--dim" style={{ width: '66%' }} />
       </div>
     </div>
   )
 }
 
-function Board() {
-  const cols = [3, 2, 2]
+/* AutoChat — a question, the assistant "typing", then an answer with citations */
+function Rag() {
   return (
-    <div className="pv-board">
-      <div className="pv-board__top">
-        <span className="pv-live">
-          <i /> live
-        </span>
-        <span className="pv-avatars">
-          <i />
-          <i />
-          <i />
+    <div className="pv-chat">
+      <div className="pv-chat__bar">
+        <span className="pv-chat__dot" />
+        <span>autochat</span>
+        <span className="pv-chat__docs">
+          <i>pdf</i>
+          <i>csv</i>
+          <i>sheet</i>
         </span>
       </div>
-      <div className="pv-board__cols">
-        {cols.map((count, c) => (
-          <div className="pv-col" key={c}>
-            <span className="pv-col__head" />
-            {Array.from({ length: count }, (_, i) => (
-              <span className={`pv-card ${c === 1 && i === 0 ? 'is-moving' : ''}`} key={i}>
-                <span />
-                <span />
-              </span>
-            ))}
-          </div>
-        ))}
+      <div className="pv-chat__msgs">
+        <div className="pv-chat__q">
+          <span style={{ width: '82%' }} />
+          <span style={{ width: '54%' }} />
+        </div>
+        <div className="pv-chat__a">
+          <span className="pv-chat__typing">
+            <i />
+            <i />
+            <i />
+          </span>
+          <span className="pv-chat__answer">
+            <span style={{ width: '92%' }} />
+            <span style={{ width: '76%' }} />
+            <span className="pv-chat__cites">
+              <i>[1]</i>
+              <i>[2]</i>
+            </span>
+          </span>
+        </div>
       </div>
     </div>
   )
 }
 
-function Shop() {
+/* Super Saint — a product grid; an item flies into the cart and the badge pops */
+function Commerce() {
   return (
     <div className="pv-shop">
       <div className="pv-shop__top">
         <span className="pv-shop__logo" />
+        <span className="pv-shop__pay">UPI · cards · COD</span>
         <span className="pv-shop__cart">
           <i />
         </span>
@@ -138,12 +205,13 @@ function Shop() {
           </span>
         ))}
       </div>
+      <span className="pv-shop__fly" />
     </div>
   )
 }
 
+/* lsm-tree — writes go to the WAL and memtable, then flush into levels that grow 10x deeper */
 function Storage() {
-  // memtable + WAL on top, then levels that grow 10x deeper down (L0, L1, L2)
   const levels = [
     { y: 92, n: 2, label: 'L0' },
     { y: 118, n: 4, label: 'L1' },
@@ -185,14 +253,22 @@ function Storage() {
   )
 }
 
-const VARIANTS = { terminal: Terminal, board: Board, shop: Shop, storage: Storage }
+const VARIANTS = {
+  workflow: Workflow,
+  fraud: Fraud,
+  credit: Credit,
+  sage: Sage,
+  rag: Rag,
+  commerce: Commerce,
+  storage: Storage,
+}
 
 function ProjectPreview({ variant }) {
-  const Variant = VARIANTS[variant]
+  const Variant = VARIANTS[variant] ?? Workflow
   return (
     <div className={`pv pv--${variant}`} aria-hidden="true">
       <div className="pv__grid" />
-      {Variant ? <Variant /> : <Flow labels={FLOWS[variant] ?? FLOWS.workflow} />}
+      <Variant />
     </div>
   )
 }

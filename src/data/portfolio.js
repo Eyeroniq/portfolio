@@ -106,8 +106,10 @@ export const stack = [
  *  - `problem` (optional): one line on what the project solves.
  *  - `approach` (optional): 2–3 engineering points (architecture, key decisions).
  *  - `results` (optional): ONLY verified outcomes, as measured in the project's own repo.
- *  - `preview`: the animated card — 'workflow' | 'fraud' | 'credit' | 'sage' | 'rag' |
- *    'commerce' | 'storage'. Set `image` to a screenshot import to show that instead.
+ *  - `preview`: the animated card, one type per kind of project — 'workflow' (pipeline),
+ *    'fraud' (payment graph), 'credit' (risk dashboard), 'sage' (terminal), 'rag' (chat),
+ *    'commerce' (shop), 'storage' (storage engine). Set `image` to a screenshot import to
+ *    show that instead.
  *  - `github` / `live`: leave '' to hide that link.
  */
 export const projects = [

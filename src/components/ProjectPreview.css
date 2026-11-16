@@ -168,92 +168,6 @@
   }
 }
 
-/* ── Board ── */
-.pv-board {
-  position: relative;
-  width: min(100%, 420px);
-  display: grid;
-  gap: 12px;
-}
-.pv-board__top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.pv-live {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-family: var(--font-mono);
-  font-size: 10px;
-  color: var(--accent);
-}
-.pv-live i {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--accent);
-  animation: pulse 2.4s var(--ease) infinite;
-}
-.pv-avatars {
-  display: flex;
-}
-.pv-avatars i {
-  width: 18px;
-  height: 18px;
-  margin-left: -5px;
-  border-radius: 50%;
-  border: 2px solid var(--pv-bg-1);
-  background: linear-gradient(135deg, #3a3a44, #24242b);
-}
-.pv-avatars i:last-child {
-  background: linear-gradient(135deg, var(--accent), #2a8f6c);
-}
-.pv-board__cols {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-}
-.pv-col {
-  display: grid;
-  align-content: start;
-  gap: 7px;
-  padding: 9px;
-  border-radius: 10px;
-  background: rgba(var(--pv-ink), 0.025);
-  border: 1px solid var(--line);
-}
-.pv-col__head {
-  width: 50%;
-  height: 5px;
-  margin-bottom: 3px;
-  border-radius: 3px;
-  background: rgba(var(--pv-ink), 0.22);
-}
-.pv-card {
-  display: grid;
-  gap: 5px;
-  padding: 8px;
-  border-radius: 7px;
-  background: var(--pv-surface);
-  border: 1px solid var(--line);
-  transition: transform 0.6s var(--ease);
-}
-.pv-card span {
-  height: 4px;
-  border-radius: 2px;
-  background: rgba(var(--pv-ink), 0.15);
-}
-.pv-card span:last-child {
-  width: 60%;
-  background: rgba(var(--pv-ink), 0.08);
-}
-.pv-card.is-moving {
-  border-color: rgba(110, 231, 183, 0.6);
-  box-shadow: 0 8px 24px -10px var(--accent-glow);
-  transform: rotate(-3deg);
-}
-
 /* ── Shop ── */
 .pv-shop {
   position: relative;
@@ -318,25 +232,528 @@
   background: rgba(110, 231, 183, 0.4);
 }
 
-/* ── Hover choreography (driven by the parent card) ── */
+/* ── Payment graph (FraudGraph) ── */
+.pv-fraud__edges line,
+.pv-fraud__out {
+  stroke: rgba(var(--pv-ink), 0.2);
+  stroke-width: 1.2;
+}
+.pv-fraud__out {
+  fill: none;
+  stroke-dasharray: 4 4;
+  animation: pv-dash 1.6s linear infinite;
+}
+.pv-fraud__acct {
+  fill: var(--pv-surface);
+  stroke: rgba(var(--pv-ink), 0.22);
+}
+.pv-fraud__acct.is-payee {
+  stroke: rgba(110, 231, 183, 0.75);
+  animation: pv-ring 2.8s var(--ease) infinite;
+}
+.pv-fraud__chip rect {
+  fill: var(--pv-surface);
+  stroke: rgba(var(--pv-ink), 0.16);
+  animation: pv-chip-rect 8s infinite;
+  animation-delay: calc(var(--i) * 2s);
+}
+.pv-fraud__chip text {
+  fill: var(--text-2);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  animation: pv-chip-text 8s infinite;
+  animation-delay: calc(var(--i) * 2s);
+}
+@keyframes pv-chip-rect {
+  0%,
+  22% {
+    stroke: rgba(110, 231, 183, 0.8);
+    fill: rgba(110, 231, 183, 0.14);
+  }
+  26%,
+  100% {
+    stroke: rgba(var(--pv-ink), 0.16);
+    fill: var(--pv-surface);
+  }
+}
+@keyframes pv-chip-text {
+  0%,
+  22% {
+    fill: var(--accent);
+  }
+  26%,
+  100% {
+    fill: var(--text-2);
+  }
+}
+@keyframes pv-ring {
+  0%,
+  100% {
+    stroke-width: 1;
+  }
+  50% {
+    stroke-width: 3;
+  }
+}
+
+/* ── Risk dashboard (CreditCast) ── */
+.pv-credit {
+  position: relative;
+  width: min(100%, 380px);
+  display: grid;
+  gap: 9px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1px solid var(--line-strong);
+  background: var(--pv-surface);
+  box-shadow: 0 30px 60px -30px var(--shadow);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: var(--text-2);
+}
+.pv-credit__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.pv-credit__title {
+  color: var(--text);
+}
+.pv-credit__decision {
+  position: relative;
+  display: inline-grid;
+}
+.pv-credit__decision b {
+  grid-area: 1 / 1;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-weight: 500;
+  text-align: center;
+}
+.pv-credit__decision .is-approve {
+  color: var(--accent);
+  background: rgba(110, 231, 183, 0.14);
+  animation: pv-swap 6s infinite;
+}
+.pv-credit__decision .is-decline {
+  color: #e5737a;
+  background: rgba(229, 115, 122, 0.12);
+  animation: pv-swap 6s infinite reverse;
+}
+@keyframes pv-swap {
+  0%,
+  45% {
+    opacity: 1;
+  }
+  50%,
+  95% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+.pv-credit__row {
+  display: grid;
+  grid-template-columns: 30px 1fr;
+  align-items: center;
+  gap: 8px;
+}
+.pv-credit__row i {
+  height: 6px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, rgba(110, 231, 183, 0.65), rgba(110, 231, 183, 0.25)) 0 0 / 30% 100% no-repeat,
+    rgba(var(--pv-ink), 0.08);
+  animation: pv-bar 6s var(--ease) infinite;
+  animation-delay: calc(var(--i) * -1.1s);
+}
+@keyframes pv-bar {
+  0%,
+  100% {
+    background-size: 30% 100%, auto;
+  }
+  50% {
+    background-size: 78% 100%, auto;
+  }
+}
+.pv-credit__grades {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 4px;
+  margin-top: 2px;
+}
+.pv-credit__grades span {
+  padding: 3px 0;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+  text-align: center;
+  font-size: 10px;
+}
+.pv-credit__marker {
+  position: absolute;
+  top: -1px;
+  bottom: -1px;
+  left: 0;
+  width: calc((100% - 20px) / 6);
+  border-radius: 6px;
+  border: 1px solid rgba(110, 231, 183, 0.85);
+  background: rgba(110, 231, 183, 0.12);
+  animation: pv-grade 6s var(--ease) infinite;
+}
+@keyframes pv-grade {
+  0%,
+  100% {
+    transform: translateX(calc(100% + 4px));
+  }
+  50% {
+    transform: translateX(calc(400% + 16px));
+  }
+}
+.pv-credit__formula {
+  color: var(--text-3);
+  font-size: 10px;
+}
+
+/* ── Terminal (SageCLI) ── */
+.pv-sage .pv-term__body {
+  gap: 7px;
+}
+.pv-sage p {
+  font-size: 11.5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.pv-sage__typed {
+  display: inline-block;
+  max-width: 0;
+  overflow: hidden;
+  vertical-align: bottom;
+  color: var(--text-2);
+  animation: pv-type 7s steps(26) infinite;
+}
+.pv-sage__cmd {
+  color: var(--text-2) !important;
+  animation: pv-step-2 7s infinite;
+}
+.pv-sage__risk {
+  animation: pv-step-3 7s infinite;
+}
+.pv-sage__risk em {
+  font-style: normal;
+  color: var(--accent);
+}
+.pv-sage__confirm {
+  animation: pv-step-4 7s infinite;
+}
+@keyframes pv-type {
+  0% {
+    max-width: 0;
+  }
+  30%,
+  100% {
+    max-width: 26ch;
+  }
+}
+@keyframes pv-step-2 {
+  0%,
+  36% {
+    opacity: 0;
+  }
+  42%,
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes pv-step-3 {
+  0%,
+  50% {
+    opacity: 0;
+  }
+  56%,
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes pv-step-4 {
+  0%,
+  62% {
+    opacity: 0;
+  }
+  68%,
+  100% {
+    opacity: 1;
+  }
+}
+
+/* ── Chat (AutoChat) ── */
+.pv-chat {
+  position: relative;
+  width: min(100%, 380px);
+  border-radius: 12px;
+  border: 1px solid var(--line-strong);
+  background: var(--pv-surface);
+  box-shadow: 0 30px 60px -30px var(--shadow);
+  overflow: hidden;
+}
+.pv-chat__bar {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 12px;
+  border-bottom: 1px solid var(--line);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: var(--text);
+}
+.pv-chat__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+.pv-chat__docs {
+  display: flex;
+  gap: 4px;
+  margin-left: auto;
+}
+.pv-chat__docs i,
+.pv-chat__cites i {
+  padding: 1px 6px;
+  border-radius: 5px;
+  border: 1px solid var(--line);
+  font-style: normal;
+  font-size: 9.5px;
+  color: var(--text-3);
+}
+.pv-chat__msgs {
+  display: grid;
+  gap: 10px;
+  padding: 12px;
+}
+.pv-chat__q,
+.pv-chat__a {
+  display: grid;
+  gap: 5px;
+  padding: 9px 10px;
+  border-radius: 10px;
+}
+.pv-chat__q {
+  justify-self: end;
+  width: 62%;
+  background: rgba(var(--pv-ink), 0.06);
+}
+.pv-chat__a {
+  position: relative;
+  width: 84%;
+  min-height: 48px;
+  border: 1px solid rgba(110, 231, 183, 0.35);
+  background: rgba(110, 231, 183, 0.06);
+}
+.pv-chat__q > span,
+.pv-chat__answer > span:not(.pv-chat__cites) {
+  display: block;
+  height: 5px;
+  border-radius: 3px;
+  background: rgba(var(--pv-ink), 0.16);
+}
+.pv-chat__typing {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  display: flex;
+  gap: 4px;
+  transform: translateY(-50%);
+  animation: pv-typing-show 5s infinite;
+}
+.pv-chat__typing i {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: pv-bounce 0.9s ease-in-out infinite;
+}
+.pv-chat__typing i:nth-child(2) {
+  animation-delay: 0.15s;
+}
+.pv-chat__typing i:nth-child(3) {
+  animation-delay: 0.3s;
+}
+.pv-chat__answer {
+  display: grid;
+  gap: 5px;
+  animation: pv-answer-show 5s infinite;
+}
+.pv-chat__cites {
+  display: flex;
+  gap: 4px;
+  margin-top: 2px;
+}
+.pv-chat__cites i {
+  color: var(--accent);
+  border-color: rgba(110, 231, 183, 0.45);
+}
+@keyframes pv-typing-show {
+  0%,
+  32% {
+    opacity: 1;
+  }
+  36%,
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes pv-answer-show {
+  0%,
+  34% {
+    opacity: 0;
+  }
+  42%,
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes pv-bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+}
+
+/* ── Shop (Super Saint) additions ── */
+.pv-shop__pay {
+  margin-left: auto;
+  margin-right: 10px;
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  color: var(--text-3);
+}
+.pv-shop__cart i {
+  animation: pv-badge 3.6s var(--ease) infinite;
+}
+.pv-shop__fly {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  margin: -4px 0 0 -4px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 8px var(--accent);
+  animation: pv-fly 3.6s var(--ease) infinite;
+}
+.pv-product:nth-child(2) {
+  animation: pv-lift 3.6s var(--ease) infinite;
+}
+@keyframes pv-fly {
+  0%,
+  10% {
+    left: 37.5%;
+    top: 60%;
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  16% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  52% {
+    left: calc(100% - 11px);
+    top: 11px;
+    opacity: 1;
+    transform: scale(0.8);
+  }
+  58%,
+  100% {
+    left: calc(100% - 11px);
+    top: 11px;
+    opacity: 0;
+    transform: scale(0.4);
+  }
+}
+@keyframes pv-badge {
+  0%,
+  50% {
+    transform: scale(1);
+  }
+  56% {
+    transform: scale(1.6);
+  }
+  64%,
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes pv-lift {
+  0%,
+  8%,
+  30%,
+  100% {
+    transform: translateY(0);
+  }
+  14% {
+    transform: translateY(-5px);
+  }
+}
+
+/* ── Hover: the whole preview leans in, and the dashed wires start flowing ── */
 .project-card:hover .pv {
   transform: scale(1.03);
 }
 .project-card:hover .pv-wires path {
   animation-play-state: running;
 }
-.project-card:hover .pv-card.is-moving {
-  transform: rotate(0deg) translateX(6px);
-}
-.project-card:hover .pv-product:nth-child(odd) {
-  transform: translateY(-4px);
-}
-.project-card:hover .pv-line {
-  transform: scaleX(1.08);
-}
 
 @media (prefers-reduced-motion: reduce) {
-  .pv-pulse {
+  .pv-pulse,
+  .pv-shop__fly,
+  .pv-chat__typing {
     display: none;
+  }
+  .pv *,
+  .pv *::before,
+  .pv *::after {
+    animation: none !important;
+  }
+  .pv-sage__typed {
+    max-width: 26ch;
+  }
+}
+
+/*
+ * The panel-style cards (dashboard, terminal, chat) have a natural height; the frame they
+ * sit in shrinks on phones and in the three-across row. Each preview is a size container,
+ * so these cards scale down with the frame and always fit inside it.
+ */
+.pv {
+  container-type: size;
+}
+.pv--credit,
+.pv--sage,
+.pv--rag {
+  padding: 4% 6%;
+}
+@container (max-height: 300px) {
+  .pv-credit,
+  .pv-sage,
+  .pv-chat {
+    zoom: 0.85;
+  }
+}
+@container (max-height: 220px) {
+  .pv-credit,
+  .pv-sage,
+  .pv-chat {
+    zoom: 0.72;
+  }
+}
+@container (max-height: 170px) {
+  .pv-credit,
+  .pv-sage,
+  .pv-chat {
+    zoom: 0.62;
   }
 }
