@@ -12,8 +12,7 @@ export const projectPages = {
     projectId: 'flowforge',
     title: 'FlowForge AI',
     kind: 'AI automation platform',
-    // TODO: paste the YouTube id of the FlowForge demo (demo/flowforge-demo.mp4) here.
-    youtubeId: '',
+    youtubeId: 'qRJpevo_WsM',
     seoTitle: 'FlowForge AI — visual AI workflow builder | Dheeraj Chingunde',
     seoDescription:
       'FlowForge AI by Dheeraj Chingunde: a visual, self-hostable AI workflow automation builder with 55 node types, live runs on Celery workers, and triggers from schedules, email, webhooks and Telegram.',
