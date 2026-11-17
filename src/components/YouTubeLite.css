@@ -1,0 +1,56 @@
+.yt {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  background: #0b0d0f;
+}
+.yt--poster {
+  padding: 0;
+  cursor: pointer;
+}
+.yt__thumb,
+.yt__frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+.yt__thumb {
+  object-fit: cover;
+  transition:
+    transform 0.8s var(--ease),
+    filter 0.6s var(--ease);
+}
+.yt__play {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  display: grid;
+  place-items: center;
+  width: 76px;
+  height: 76px;
+  margin: -38px 0 0 -38px;
+  border-radius: 50%;
+  color: #0b0d0f;
+  background: var(--accent);
+  box-shadow:
+    0 0 0 8px rgba(110, 231, 183, 0.22),
+    0 18px 40px -12px rgba(0, 0, 0, 0.5);
+  transition: transform 0.4s var(--ease);
+}
+.yt__play svg {
+  margin-left: 4px;
+}
+.yt--poster:hover .yt__play,
+.yt--poster:focus-visible .yt__play {
+  transform: scale(1.08);
+}
+.yt--poster:hover .yt__thumb {
+  transform: scale(1.02);
+  filter: brightness(0.92);
+}

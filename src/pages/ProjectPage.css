@@ -1,0 +1,400 @@
+/* Project case-study page — the same light, editorial theme as the home page's sections */
+.pp {
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+}
+
+/* ── Top bar ── */
+.pp-top {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  border-bottom: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.82);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  backdrop-filter: blur(14px) saturate(140%);
+}
+.pp-top__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 60px;
+}
+.pp-brand {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 3px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 16px;
+  letter-spacing: 0.06em;
+}
+.pp-brand span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #0e9f6e;
+}
+.pp-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 14.5px;
+  color: var(--text-2);
+  transition: color 0.25s var(--ease);
+}
+.pp-back:hover {
+  color: var(--text);
+}
+
+/* ── Intro ── */
+.pp-hero {
+  padding-top: clamp(40px, 7vw, 96px);
+}
+.pp-kind {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #0e9f6e;
+}
+.pp-title {
+  margin-top: 18px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(44px, 8vw, 104px);
+  line-height: 0.95;
+  letter-spacing: -0.045em;
+}
+.pp-lead {
+  margin-top: 22px;
+  max-width: 62ch;
+  font-size: clamp(16px, 1.4vw, 19px);
+  line-height: 1.6;
+  color: var(--text-2);
+}
+.pp-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 30px;
+}
+.pp-actions .btn {
+  gap: 9px;
+}
+.pp-facts {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1px;
+  margin-top: clamp(36px, 5vw, 56px);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--line);
+}
+.pp-facts > div {
+  padding: 16px 18px;
+  background: var(--bg);
+}
+.pp-facts dt {
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-3);
+}
+.pp-facts dd {
+  margin: 6px 0 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(20px, 2vw, 26px);
+  letter-spacing: -0.02em;
+}
+
+/* ── Video ── */
+.pp-video {
+  margin-top: clamp(28px, 4vw, 44px);
+}
+.pp-video__card {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+}
+
+/* ── Sections ── */
+.pp-section {
+  padding-top: clamp(56px, 8vw, 104px);
+}
+.pp-h2 {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(30px, 4vw, 48px);
+  letter-spacing: -0.035em;
+}
+.pp-h2 .mono {
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  color: #0e9f6e;
+}
+.pp-prose {
+  display: grid;
+  gap: 14px;
+  margin-top: 20px;
+  max-width: 70ch;
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--text-2);
+}
+.pp-features {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(16px, 2vw, 24px);
+  margin-top: 32px;
+}
+.pp-feature {
+  padding: clamp(20px, 2.4vw, 28px);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+.pp-feature h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 19px;
+  letter-spacing: -0.02em;
+}
+.pp-list {
+  display: grid;
+  gap: 10px;
+  margin-top: 14px;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--text-2);
+}
+.pp-list li {
+  position: relative;
+  padding-left: 18px;
+}
+.pp-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.72em;
+  width: 7px;
+  height: 1.5px;
+  background: #0e9f6e;
+}
+.pp-list--results {
+  margin-top: 22px;
+  max-width: 70ch;
+  font-size: 16px;
+}
+
+/* Request path, drawn as connected pills */
+.pp-flow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 0;
+  margin-top: 26px;
+}
+.pp-flow li {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  white-space: nowrap;
+  color: var(--text);
+}
+/* dashed connector before every step except the first */
+.pp-flow li::before {
+  content: '';
+  display: inline-block;
+  width: 26px;
+  height: 1px;
+  margin: 0 10px;
+  background: repeating-linear-gradient(90deg, var(--text-3) 0 4px, transparent 4px 8px);
+}
+.pp-flow li:first-child::before {
+  display: none;
+}
+.pp-flow li:last-child {
+  color: #0e9f6e;
+}
+
+.pp-stack {
+  width: 100%;
+  margin-top: 28px;
+  border-collapse: collapse;
+  font-size: 15px;
+}
+.pp-stack th,
+.pp-stack td {
+  padding: 14px 0;
+  border-top: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+}
+.pp-stack tr:last-child th,
+.pp-stack tr:last-child td {
+  border-bottom: 1px solid var(--line);
+}
+.pp-stack th {
+  width: 140px;
+  padding-right: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-3);
+}
+.pp-stack td {
+  color: var(--text-2);
+  line-height: 1.55;
+}
+
+/* ── Run it locally ── */
+.pp-needs {
+  margin-top: 18px;
+  color: var(--text-2);
+}
+.pp-needs b {
+  color: var(--text);
+}
+.pp-steps {
+  display: grid;
+  gap: 22px;
+  margin-top: 28px;
+}
+.pp-steps li {
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1fr);
+  gap: 14px;
+}
+.pp-steps__n {
+  padding-top: 2px;
+  font-size: 13px;
+  color: #0e9f6e;
+}
+.pp-steps h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 17px;
+  letter-spacing: -0.01em;
+}
+.pp-code {
+  position: relative;
+  margin-top: 10px;
+  border-radius: 12px;
+  background: #0d0f12;
+  color: #e7e9ee;
+}
+.pp-code pre {
+  margin: 0;
+  padding: 16px 92px 16px 18px;
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.65;
+}
+.pp-copy {
+  position: absolute;
+  top: 9px;
+  right: 9px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 32px;
+  padding: 0 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.06);
+  color: #cfd3db;
+  font-size: 12px;
+  cursor: pointer;
+  transition:
+    color 0.2s var(--ease),
+    border-color 0.2s var(--ease);
+}
+.pp-copy:hover {
+  color: var(--accent);
+  border-color: rgba(110, 231, 183, 0.5);
+}
+.pp-note {
+  margin-top: 8px;
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: var(--text-3);
+}
+.pp-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 28px;
+  margin-top: 30px;
+}
+.pp-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 15px;
+  transition: color 0.25s var(--ease);
+}
+.pp-links a:hover {
+  color: #0e9f6e;
+}
+
+/* ── Contact + footer ── */
+.pp-cta {
+  margin-top: clamp(64px, 9vw, 120px);
+  padding-block: clamp(36px, 5vw, 56px);
+  border-top: 1px solid var(--line);
+}
+.pp-cta h2 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(28px, 3.6vw, 44px);
+  letter-spacing: -0.035em;
+}
+.pp-cta p {
+  margin-top: 10px;
+  color: var(--text-2);
+}
+.pp-footer {
+  padding-block: 28px 40px;
+  font-size: 12px;
+  color: var(--text-3);
+}
+
+/* ── Phones ── */
+@media (max-width: 719px) {
+  .pp-facts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .pp-features {
+    grid-template-columns: 1fr;
+  }
+  .pp-stack th {
+    width: 96px;
+  }
+  .pp-steps li {
+    grid-template-columns: 30px minmax(0, 1fr);
+    gap: 10px;
+  }
+  .pp-code pre {
+    padding-right: 18px;
+    padding-top: 48px;
+  }
+}

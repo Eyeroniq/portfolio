@@ -1,8 +1,9 @@
 import { useState } from 'react'
-import { ArrowUpRight } from 'lucide-react'
+import { ArrowRight, ArrowUpRight } from 'lucide-react'
 import { GithubIcon } from './BrandIcons.jsx'
 import ProjectPreview from './ProjectPreview.jsx'
 import Reveal from './Reveal.jsx'
+import { projectPageHref } from '../data/projectPages.js'
 import './ProjectCard.css'
 
 // Links render only when a real URL exists — no dead or "coming soon" links.
@@ -28,6 +29,13 @@ const LiveIcon = (props) => <ArrowUpRight {...props} />
 export default function ProjectCard({ project, index, className = '' }) {
   const [imageFailed, setImageFailed] = useState(false)
   const showImage = project.image && !imageFailed
+  // Projects with a case-study page: the whole card opens it (links inside keep their own targets)
+  const pageHref = projectPageHref(project.id)
+  const openPage = (e) => {
+    if (!pageHref || e.target.closest('a, button')) return
+    if (window.getSelection()?.toString()) return // let people select text
+    window.location.href = pageHref
+  }
 
   // Spotlight follows the pointer via CSS variables — no React re-render.
   const onPointerMove = (e) => {
@@ -38,7 +46,12 @@ export default function ProjectCard({ project, index, className = '' }) {
 
   return (
     <Reveal delay={(index % 2) * 0.1} className={`project-card-wrap ${className}`}>
-      <article className="project-card" onPointerMove={onPointerMove} aria-labelledby={`project-${project.id}`}>
+      <article
+        className={`project-card${pageHref ? ' has-page' : ''}`}
+        onPointerMove={onPointerMove}
+        onClick={openPage}
+        aria-labelledby={`project-${project.id}`}
+      >
         <div className="project-card__media">
           {showImage ? (
             <img
@@ -60,7 +73,7 @@ export default function ProjectCard({ project, index, className = '' }) {
             {project.kind}
           </p>
           <h3 className="project-card__title" id={`project-${project.id}`}>
-            {project.title}
+            {pageHref ? <a href={pageHref}>{project.title}</a> : project.title}
           </h3>
           <p className="project-card__desc">{project.description}</p>
 
@@ -106,8 +119,14 @@ export default function ProjectCard({ project, index, className = '' }) {
             ))}
           </ul>
 
-          {(project.github || project.live) && (
+          {(project.github || project.live || pageHref) && (
             <div className="project-card__links">
+              {pageHref && (
+                <a className="project-link project-link--page" href={pageHref}>
+                  Case study
+                  <ArrowRight className="project-link__arrow" size={14} aria-hidden="true" />
+                </a>
+              )}
               <ProjectLink href={project.github} icon={GithubIcon} label="Code" project={project.title} />
               <ProjectLink href={project.live} icon={LiveIcon} label="Live demo" project={project.title} />
             </div>

@@ -180,6 +180,20 @@
 .project-link:hover .project-link__arrow {
   transform: translate(2px, -2px);
 }
+/* Cards with a case-study page open it on click */
+.project-card.has-page {
+  cursor: pointer;
+}
+.project-card__title a {
+  color: inherit;
+}
+.project-card__title a:hover {
+  color: #0e9f6e;
+}
+.project-link--page {
+  color: #0e9f6e;
+}
+
 @media (hover: none) {
   .project-card:hover {
     transform: none;
