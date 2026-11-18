@@ -66,6 +66,12 @@ export default function ProjectPage({ slug }) {
                 <span className="btn__label">View on GitHub</span>
               </a>
             )}
+            {project?.live && (
+              <a className="btn btn--outline" href={project.live} target="_blank" rel="noreferrer noopener">
+                <span className="btn__label">Live demo</span>
+                <ArrowUpRight size={16} aria-hidden="true" />
+              </a>
+            )}
             <a className="btn btn--outline" href="#run">
               <span className="btn__label">Run it on your PC</span>
             </a>

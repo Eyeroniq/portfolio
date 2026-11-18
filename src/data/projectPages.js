@@ -122,6 +122,110 @@ export const projectPages = {
       { label: 'Hosting guide', href: 'https://github.com/Eyeroniq/AutoFlow-Ai/blob/main/docs/HOSTING.md' },
     ],
   },
+
+  creditcast: {
+    slug: 'creditcast',
+    projectId: 'creditcast',
+    title: 'CreditCast',
+    kind: 'ML · credit risk platform',
+    youtubeId: 'upZVHrQIWmQ',
+    seoTitle: 'CreditCast — credit-risk modelling and validation platform | Dheeraj Chingunde',
+    seoDescription:
+      'CreditCast by Dheeraj Chingunde: a bank-style credit-risk platform combining a calibrated PD model, LGD and EAD into Expected Loss, with validation, SHAP reason codes, fairness testing, stress tests and drift monitoring.',
+    lead: 'A bank-style credit-risk platform for mortgages: it predicts the chance a borrower defaults, how much would be lost, decides approve or decline with reasons, and checks itself for accuracy, drift and fairness.',
+    facts: [
+      { label: 'Expected loss', value: 'PD × LGD × EAD' },
+      { label: 'Dashboard', value: '6 screens' },
+      { label: 'Tests', value: '190+' },
+      { label: 'Run it', value: 'Docker' },
+    ],
+    overview: [
+      'A credit model has to be validated, explained and monitored, not just accurate. CreditCast builds the whole lifecycle around the model: a calibrated probability-of-default model (a regulatory WoE scorecard and a LightGBM challenger), loss-given-default and exposure-at-default, combined into Expected Loss, following the Basel / IRB methodology.',
+      "It runs on a seeded synthetic dataset in Freddie Mac's Single-Family loan and monthly-performance format, so the whole stack runs offline and reproducibly, and the real dataset can drop in later. Built with a teammate.",
+    ],
+    features: [
+      {
+        title: 'Scoring an applicant',
+        items: [
+          'Live decisions: default risk, expected loss, capital and the reasons behind them, updating as you move a slider.',
+          'What-if panel: finds the smallest single change that turns a declined applicant into an approval.',
+          'Adverse-action reason codes from SHAP, a downloadable PDF decision letter, and side-by-side applicant comparison.',
+        ],
+      },
+      {
+        title: 'The portfolio',
+        items: [
+          'The whole test book: expected loss, Basel capital, lifetime default risk and IFRS 9 staging; chart clicks filter the loan table.',
+          'Stress tests: adverse and severely adverse recession scenarios, plus an unemployment slider.',
+        ],
+      },
+      {
+        title: 'Validation and governance',
+        items: [
+          'Out-of-time validation: Gini, KS, gains, calibration (Hosmer-Lemeshow), PSI / CSI and a benchmark.',
+          'Fairness testing by group, the trade-off of moving the approval limit, and a search for a fairer model; race is never a model input.',
+          'Drift monitoring, a model card, and a reject-inference study.',
+        ],
+      },
+      {
+        title: 'Engineering',
+        items: [
+          'Leakage-safe design: features use only what was known at the observation date, the target looks 12 months ahead, and the split is out-of-time, never random.',
+          'Bronze → Silver → Gold pipeline on DuckDB, with an optional PySpark engine that writes the same Gold files, checked value for value.',
+          'One Docker image: FastAPI serves the API and the pre-built Next.js dashboard from one origin.',
+        ],
+      },
+    ],
+    architecture: {
+      text: 'The pipeline turns raw loan panels into a leakage-safe feature matrix, splits it by vintage, and trains the PD scorecard and challenger, then LGD and EAD. Every model passes a validation suite and governance checks before it is served by FastAPI to the Risk Cockpit, with drift monitoring on top. CI fails any model that misses its performance gates.',
+      flow: ['Bronze → Silver → Gold', 'Out-of-time split', 'PD · LGD · EAD', 'Validation + governance', 'FastAPI + Risk Cockpit'],
+    },
+    stack: [
+      { layer: 'Data', tech: 'pandas, DuckDB, Polars, PyArrow (parquet), optional PySpark' },
+      { layer: 'Models', tech: 'scikit-learn, LightGBM, optbinning (WoE / IV scorecard), statsmodels, SciPy' },
+      { layer: 'Governance', tech: 'SHAP, Fairlearn, MLflow' },
+      { layer: 'Serving', tech: 'FastAPI, Uvicorn, Pydantic v2, SlowAPI rate limits' },
+      { layer: 'Dashboard', tech: 'Next.js, React, Recharts' },
+      { layer: 'Quality', tech: 'pytest (80% coverage floor), Vitest, Playwright, ruff, mypy' },
+      { layer: 'Infra', tech: 'Docker, Docker Compose, Caddy, GitHub Actions CI' },
+    ],
+    results: [
+      '190+ automated tests, and quality gates (accuracy, calibration, drift, stress, lifetime risk) that block any model that fails them.',
+      'Stress scenarios on the synthetic book: losses go from 1.3% to 3.9% of the book, and approvals fall from 82% to 27%, under a severe recession.',
+    ],
+    run: {
+      needs: 'Docker. Nothing else.',
+      steps: [
+        {
+          title: 'Get the code',
+          code: 'git clone https://github.com/Eyeroniq/CreditCast.git\ncd CreditCast',
+        },
+        {
+          title: 'Build the image',
+          code: 'docker build -t creditcast .',
+          note: 'The models are trained and baked in at build time, so this takes a few minutes.',
+        },
+        {
+          title: 'Start it',
+          code: 'docker run -p 8000:8000 creditcast',
+        },
+        {
+          title: 'Open the app',
+          code: 'http://localhost:8000',
+          note: 'Start on Score: pick "Prime borrower", then "High-risk borrower", and move the credit-score slider.',
+        },
+        {
+          title: 'Or, on Windows without Docker',
+          code: 'powershell -ExecutionPolicy Bypass -File scripts\\demo.ps1',
+          note: 'Needs Python 3.11+ and Node 24. The first run sets everything up and trains the models (about 5 minutes).',
+        },
+      ],
+    },
+    links: [
+      { label: 'Source code on GitHub', href: 'https://github.com/Eyeroniq/CreditCast' },
+      { label: 'Demo walkthrough', href: 'https://github.com/Eyeroniq/CreditCast/blob/main/DEMO.md' },
+    ],
+  },
 }
 
 /** Page URL for a project card, or null when the project has no page yet. */

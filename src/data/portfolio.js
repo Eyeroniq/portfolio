@@ -196,7 +196,7 @@ export const projects = [
     tags: ['Python', 'LightGBM', 'SHAP', 'FastAPI', 'Next.js', 'PySpark'],
     preview: 'credit',
     image: null,
-    github: 'https://github.com/sidnov6/CreditForge',
+    github: 'https://github.com/Eyeroniq/CreditCast',
     live: 'https://huggingface.co/spaces/sidnov6/CreditForge',
   },
   {
