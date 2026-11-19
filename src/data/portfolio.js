@@ -29,10 +29,10 @@ export const profile = {
 export const links = {
   // Powers every "email" action on the site (forwards to Gmail via Cloudflare Email Routing).
   email: 'dheeraj@dheerajc.in',
-  // TODO: e.g. 'https://github.com/your-handle'
+  // TODO: e.g. 'https://github.com/Eyeroniq'. Leave '' to hide the GitHub link.
   github: '',
   // TODO: e.g. 'https://www.linkedin.com/in/your-handle'
-  linkedin: '',
+  linkedin: 'https://in.linkedin.com/in/dheeraj-chingunde',
   // TODO: drop your CV at /public/cv.pdf and set this to '/cv.pdf'.
   // While empty, the CV action is an honest "Request CV" email instead of a download.
   cv: '',
