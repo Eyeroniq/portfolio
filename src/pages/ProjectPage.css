@@ -128,6 +128,36 @@
   border: 1px solid var(--line);
 }
 
+.pp-videos {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(16px, 2vw, 24px);
+}
+.pp-videos figure {
+  margin: 0;
+}
+.pp-videos figcaption {
+  margin-top: 12px;
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: var(--text-2);
+}
+.pp-videos figcaption b {
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: var(--text);
+}
+@media (max-width: 719px) {
+  .pp-videos {
+    grid-template-columns: 1fr;
+  }
+  .pp-videos .yt__play {
+    width: 60px;
+    height: 60px;
+    margin: -30px 0 0 -30px;
+  }
+}
+
 /* ── Sections ── */
 .pp-section {
   padding-top: clamp(56px, 8vw, 104px);

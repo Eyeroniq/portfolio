@@ -14,6 +14,7 @@ export default defineConfig({
         main: resolve(import.meta.dirname, 'index.html'),
         flowforge: resolve(import.meta.dirname, 'projects/flowforge/index.html'),
         creditcast: resolve(import.meta.dirname, 'projects/creditcast/index.html'),
+        supersaint: resolve(import.meta.dirname, 'projects/supersaint/index.html'),
       },
     },
   },

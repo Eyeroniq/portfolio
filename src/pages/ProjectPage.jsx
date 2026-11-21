@@ -34,6 +34,7 @@ export default function ProjectPage({ slug }) {
   const page = projectPages[slug]
   const project = projects.find((p) => p.id === page.projectId)
   const github = project?.github
+  const videos = page.videos ?? (page.youtubeId ? [{ id: page.youtubeId }] : [])
 
   return (
     <div className="pp theme-light">
@@ -86,10 +87,22 @@ export default function ProjectPage({ slug }) {
           </dl>
         </section>
 
-        {/* Demo video (YouTube, loaded on play) — or the animated card until a video is set */}
+        {/* Demo video(s) (YouTube, loaded on play) — or the animated card until a video is set */}
         <section className="container pp-video" aria-label="Demo">
-          {page.youtubeId ? (
-            <YouTubeLite id={page.youtubeId} title={`${page.title} demo`} />
+          {videos.length > 1 ? (
+            <div className="pp-videos">
+              {videos.map((v) => (
+                <figure key={v.id}>
+                  <YouTubeLite id={v.id} title={`${page.title}: ${v.label}`} />
+                  <figcaption>
+                    <b>{v.label}</b>
+                    {v.text && ` — ${v.text}`}
+                  </figcaption>
+                </figure>
+              ))}
+            </div>
+          ) : videos.length === 1 ? (
+            <YouTubeLite id={videos[0].id} title={`${page.title} demo`} />
           ) : (
             <div className="pp-video__card project-card">
               <ProjectPreview variant={project?.preview} />

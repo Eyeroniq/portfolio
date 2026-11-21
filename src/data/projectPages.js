@@ -226,6 +226,114 @@ export const projectPages = {
       { label: 'Demo walkthrough', href: 'https://github.com/Eyeroniq/CreditCast/blob/main/DEMO.md' },
     ],
   },
+
+  supersaint: {
+    slug: 'supersaint',
+    projectId: 'supersaint',
+    title: 'Super Saint',
+    kind: 'Full-stack e-commerce + analytics',
+    videos: [
+      { id: '7D6UL-SbP0s', label: 'The store', text: 'find a product, check out with a coupon, and the admin ships the order.' },
+      { id: '7YOASGlp1jY', label: 'The analytics', text: 'funnel, cohorts, RFM, A/B tests and exports on a year of simulated data.' },
+    ],
+    seoTitle: 'Super Saint — full-stack MERN e-commerce store with analytics | Dheeraj Chingunde',
+    seoDescription:
+      'Super Saint by Dheeraj Chingunde: a full-stack TypeScript MERN e-commerce store with Razorpay payments, an admin dashboard, and an analytics layer with a DuckDB warehouse, SQL, cohorts, RFM and A/B statistics.',
+    lead: 'A full-stack e-commerce store for fitted essentials, with Razorpay payments, an admin dashboard, and a built-in analytics layer: event tracking, a SQL warehouse, cohorts, RFM and A/B testing.',
+    facts: [
+      { label: 'Stack', value: 'TypeScript MERN' },
+      { label: 'Payments', value: 'Razorpay + COD' },
+      { label: 'SQL queries', value: '14' },
+      { label: 'Analytics pages', value: '7' },
+    ],
+    overview: [
+      'A small brand needs a store, payments and the numbers to run it, in one place. Super Saint is the store and the admin side together: shoppers browse, search, filter and check out; the admin manages products, orders, customers and coupons.',
+      'On top sits an analytics layer. The store tracks events, a warehouse turns them into a star schema, and the admin dashboard answers business questions. The analytics demo runs on a year of simulated store activity in a separate database, so the live store is never touched.',
+    ],
+    features: [
+      {
+        title: 'Storefront',
+        items: [
+          'Announcement bar, sticky header, slide-in menu, live search and a cart drawer with a free-shipping progress bar.',
+          'Collection page with filter and sort; product pages with sizes, colour variants, size chart and accordions.',
+          'Email / password accounts, order history, and order tracking with a status timeline.',
+        ],
+      },
+      {
+        title: 'Payments and admin',
+        items: [
+          'Razorpay checkout (UPI, cards, netbanking, wallets) and Cash on Delivery.',
+          "Order totals are always calculated on the server, and payments are checked against Razorpay's signature before an order is created.",
+          'Admin dashboard for products, orders, customers and coupons; admin routes need a JWT with the admin role.',
+        ],
+      },
+      {
+        title: 'Analytics',
+        items: [
+          'Event tracking for product views, search, cart, checkout, payments, orders and coupons, batched with sendBeacon.',
+          'Dashboard pages: Overview (KPIs and funnel), Customers (cohorts, RFM), Products (ABC, stock cover), Payments and ops, Search and coupons, A/B tests, Exports.',
+          "A/B statistics: two-proportion z-test, Welch's t-test, 95% confidence intervals, sample-ratio mismatch check and a sample-size calculator.",
+        ],
+      },
+      {
+        title: 'Data work',
+        items: [
+          'Deterministic simulator (fixed seed): weekday patterns, a festive sale spike, seasonality, COD vs prepaid, cancellations, RTO and returns.',
+          'DuckDB star schema (no personal data) and 14 SQL queries using CTEs, window functions, GROUPING SETS and quantiles.',
+          'A findings report with 7 insights, each with its query, numbers, chart and recommendation, plus a Power BI / Excel guide.',
+        ],
+      },
+    ],
+    architecture: {
+      text: 'The React storefront talks to an Express API backed by MongoDB. Store events flow into MongoDB too; a script exports them into a DuckDB star schema for SQL analysis, while the admin analytics API answers dashboard questions with MongoDB aggregations, covering indexes and a 5-minute cache.',
+      flow: ['React + RTK Query', 'Express API', 'MongoDB', 'DuckDB warehouse', 'Analytics dashboard'],
+    },
+    stack: [
+      { layer: 'Frontend', tech: 'TypeScript, React, Redux Toolkit (RTK Query), Sass, Chart.js, Vite' },
+      { layer: 'Backend', tech: 'TypeScript, Node.js, Express, MongoDB (Mongoose)' },
+      { layer: 'Auth', tech: 'JWT, bcrypt-hashed passwords, admin role checks' },
+      { layer: 'Payments', tech: 'Razorpay (UPI, cards, netbanking, wallets), Cash on Delivery' },
+      { layer: 'Analytics', tech: 'DuckDB star schema, SQL, MongoDB aggregations, Power BI / Excel exports' },
+      { layer: 'Tests', tech: 'Vitest: statistics and metrics, plus a check that SQL results match the live API' },
+    ],
+    results: [
+      'Covering indexes cut the 30-day analytics queries from 1.4–3.1 s to 14–407 ms; cached responses return in about 2 ms.',
+      'Every warehouse query runs in under 100 ms in DuckDB.',
+      'Simulated year of data: 463,465 sessions, 1,442,963 events, 16,655 orders and 13,809 customers, reproducible with one command.',
+    ],
+    run: {
+      needs: 'Node.js and MongoDB running on mongodb://127.0.0.1:27017.',
+      steps: [
+        {
+          title: 'Get the code',
+          code: 'git clone https://github.com/Eyeroniq/supersaint.git\ncd supersaint',
+        },
+        {
+          title: 'Start the backend',
+          code: 'cd Backend\ncp .env.example .env\nnpm install\nnpm run build\nnpm run seed\nnpm start',
+          note: 'Set JWT_SECRET and ADMIN_PASSWORD in .env first. The seed adds a sample catalogue and the admin account; the API runs on http://localhost:4000.',
+        },
+        {
+          title: 'Start the frontend (second terminal)',
+          code: 'cd Front-End\ncp .env.example .env\nnpm install\nnpm run dev',
+        },
+        {
+          title: 'Open the store',
+          code: 'http://localhost:5173',
+          note: 'Log in as the admin from Backend/.env and open Menu → Admin Dashboard.',
+        },
+        {
+          title: 'Optional: the analytics demo',
+          code: 'cd Backend\nnpm run analytics\nnpm run dev:sim',
+          note: 'Simulates 12 months of data (about 2 minutes), builds the warehouse, runs the SQL and tests, then serves the dashboard on the simulated data. Open Admin → Analytics.',
+        },
+      ],
+    },
+    links: [
+      { label: 'Source code on GitHub', href: 'https://github.com/Eyeroniq/supersaint' },
+      { label: 'Analysis report', href: 'https://github.com/Eyeroniq/supersaint/blob/main/docs/analysis_report.md' },
+    ],
+  },
 }
 
 /** Page URL for a project card, or null when the project has no page yet. */
